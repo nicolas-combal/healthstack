@@ -17,8 +17,8 @@ const ROUTES = [
     },
     {
         url: '/reports',
-        auth: true,
-        creditCheck: true,
+        auth: false,
+        creditCheck: false,
         proxy: {
             target: "http://localhost:8002/reports",
             changeOrigin: true,
