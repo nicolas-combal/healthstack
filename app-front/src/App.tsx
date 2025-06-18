@@ -58,8 +58,11 @@ const App: React.FC = () => {
         <ul>
           {services.map((service) => (
               <li key={service.name} style={{ margin: "1rem 0" }}>
-                <strong>{service.name}</strong>:{" "}
-                <span
+                  <a href={`http://localhost:8000${service.url}`}
+                     target="_blank"
+                     rel="noopener noreferrer"> {service.name}
+                  </a>:{" "}
+                  <span
                     style={{
                       color: getStatusColor(status[service.name]),
                       fontWeight: "bold",
