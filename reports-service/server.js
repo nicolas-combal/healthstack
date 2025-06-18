@@ -1,14 +1,20 @@
 const express = require('express');
+const cors = require('cors');
+const initDb = require('./models');
+const reportRoutes = require('./routes/report.routes');
 
 const app = express();
-const cors = require('cors');
-app.use(cors());
 const port = 8002;
 
-app.get('/reports', (req, res) => {
-    res.send('<h1>Service Reports</h1>');
-});
+app.use(cors());
+app.use(express.json());
 
-app.listen(port, () => {
-    console.log(`Reports service listening at http://localhost:${port}`);
+app.use('/reports', reportRoutes); // ← This handles GET /reports
+
+initDb().then(() => {
+  app.listen(port, () => {
+    console.log(`✅ Report service listening at http://localhost:${port}`);
+  });
+}).catch(err => {
+  console.error('❌ Failed to init DB:', err);
 });
