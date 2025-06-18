@@ -7,7 +7,7 @@ const port = 8001;
 app.use(express.json());
 
 app.get('/auth', (req, res) => {
-    res.send('<h1>Service Auth hello</h1>');
+    res.send('<h1>Service Auth</h1>');
 });
 
 app.listen(port, () => {
