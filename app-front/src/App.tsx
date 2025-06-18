@@ -8,9 +8,9 @@ interface Service {
 }
 
 const services: Service[] = [
-  { name: "Gateway", url: "http://localhost:5000/health" },
-  { name: "Service 1", url: "http://localhost:5001/health" },
-  { name: "Service 2", url: "http://localhost:5002/health" },
+  { name: "Gateway", url: "http://localhost:8000/health" },
+  { name: "Service Auth", url: "http://localhost:8001/auth" },
+  { name: "Service Reports", url: "http://localhost:8002/repots" },
 ];
 
 const App: React.FC = () => {
