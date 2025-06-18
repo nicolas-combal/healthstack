@@ -59,7 +59,6 @@ const App: React.FC = () => {
           {services.map((service) => (
               <li key={service.name} style={{ margin: "1rem 0" }}>
                   <a href={`http://localhost:8000${service.url}`}
-                     target="_blank"
                      rel="noopener noreferrer"> {service.name}
                   </a>:{" "}
                   <span
