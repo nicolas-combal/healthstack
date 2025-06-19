@@ -1,9 +1,14 @@
 FROM node:18
 
 WORKDIR /app
-COPY . .
-RUN npm install
-RUN npm run build
 
-RUN npm install -g serve
-CMD ["serve", "-s", "build", "-l", "3000"]
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+
+CMD ["npm", "run", "start"]
