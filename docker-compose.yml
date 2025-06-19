@@ -21,22 +21,85 @@ services:
       - ./api-gateway:/app
       - /app/node_modules
 
-  auth-service:
-    build: ./auth-service
+  auth-db:
+    image: postgres:15
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     networks:
       - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d authdb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
     volumes:
       - ./auth-service:/app
       - /app/node_modules
+    depends_on:
+      auth-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    environment:
+      DB_HOST: auth-db
+      DB_PORT: 5432
+      DB_NAME: authdb
+      DB_USER: postgres
+      DB_PASS: yourpassword
+
+  report-db:
+    image: postgres:15
+    container_name: report-db
+    environment:
+      POSTGRES_DB: reportdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+    ports:
+      - "5435:5432"
+    volumes:
+      - reportdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d reportdb" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   reports-service:
     build: ./reports-service
-    networks:
-      - app-network
+    container_name: reports-service
     volumes:
       - ./reports-service:/app
       - /app/node_modules
+    depends_on:
+      report-db:
+        condition: service_healthy
+    networks:
+      - app-network
+    environment:
+      DB_HOST: report-db # ✅ this must match service name
+      DB_PORT: 5432
+      DB_NAME: reportdb
+      DB_USER: postgres
+      DB_PASS: yourpassword
+
+volumes:
+  reportdata:
+  pgdata:
 
 networks:
   app-network:
     driver: bridge
+    external: true
