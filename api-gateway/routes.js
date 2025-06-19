@@ -26,6 +26,21 @@ const ROUTES = [
                 [`^/reports`]: '',
             },
         }
+    },
+    {
+        url: '/pgadmin',
+        auth: false,
+        creditCheck: false,
+        proxy: {
+            target: "http://pgadmin:80",
+            changeOrigin: true,
+            pathRewrite: {
+                '^/pgadmin(.*)': '$1'
+            },
+            headers: {
+                'X-Script-Name': '/pgadmin'
+            }
+        }
     }
 ];
 
