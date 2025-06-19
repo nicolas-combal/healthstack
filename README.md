@@ -10,6 +10,22 @@ ainsi qu'une interface d’administration via pgAdmin.
 
 ---
 
+## 🚀 Lancer le projet
+
+```bash
+docker network create --driver bridge app-network
+docker-compose up --build
+```
+
+Ensuite, accédez à :
+
+- Frontend : http://localhost:3000
+- Service Auth : http://localhost:8000/auth
+- Service Reports : http://localhost:8000/reports
+- PgAdmin : http://localhost:8000/pgadmin
+
+---
+
 ## 📐 Architecture
 
 ![Schéma Archi](healthstack_schema.png "Schéma Archi")
@@ -39,22 +55,6 @@ Toutes les routes publiques passent par le **Gateway (localhost:8000)** :
 - `GET /pgadmin` → interface pgAdmin reverse proxy
 
 > 🔒 Auth et gestion de quotas sont activables via les configs de route dans `routes.js`.
-
----
-
-## 🚀 Lancer le projet
-
-```bash
-docker network create --driver bridge app-network
-docker-compose up --build
-```
-
-Ensuite, accédez à :
-
-- Frontend : http://localhost:3000
-- Service Auth : http://localhost:8000/auth
-- Service Reports : http://localhost:8000/reports
-- PgAdmin : http://localhost:8000/pgadmin
 
 ---
 
