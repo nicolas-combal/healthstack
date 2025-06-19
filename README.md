@@ -1,6 +1,19 @@
 # 🧱 Healthstack
-Le but de cette application est de donner la possibilité aux médecins et aux patients
-de consulter facilement des rapports médicaux.
+
+## Explication de Projet
+
+Le projet a pour objectif de développer une plateforme de gestion de rapports médicaux accessible via une interface web.
+Cette solution est destinée à faciliter le suivi médical des patients, tout en garantissant la sécurité et la confidentialité des données de santé.
+
+Trois types d’utilisateurs interagissent avec la plateforme :
+
+Les médecins peuvent se connecter à leur espace sécurisé afin de créer, modifier, consulter et archiver des rapports médicaux pour les patients qu’ils suivent. Ils disposent d’un accès complet aux informations nécessaires à la prise en charge médicale.
+
+Les patients disposent d’un accès restreint à leur propre espace personnel, depuis lequel ils peuvent consulter uniquement leurs propres rapports médicaux. Cela leur permet de suivre l’évolution de leur état de santé et de conserver un historique numérique de leurs consultations.
+
+L’administrateur a un rôle de gestion du système. Il est responsable de la création des comptes utilisateurs et de leur affectation à un groupe d’accès : médecin ou patient. Il ne consulte pas les rapports médicaux, mais s’assure du bon fonctionnement de la plateforme et de la gestion des droits d’accès.
+
+L’ensemble du système repose sur une architecture modulaire et sécurisée, permettant une évolutivité facile. Chaque utilisateur interagit avec la plateforme selon les droits qui lui sont attribués, et les données sont stockées de manière structurée pour assurer leur intégrité et leur confidentialité.
 
 La stack est composée de plusieurs microservices conteneurisés avec Docker.
 Elle inclut une interface front-end, une API Gateway,
@@ -79,7 +92,7 @@ bases de données grâce au fichier de config **servers.json** (pgadmin/**server
 ## ⚙️ Explication Choix techniques
 L’architecture Healthstack repose sur une approche moderne orientée microservices, permettant de découpler les responsabilités fonctionnelles (authentification, gestion de rapports médicaux) dans des services indépendants. Ce choix favorise plusieurs avantages cruciaux pour un projet évolutif :
 
-🔁 Séparation des responsabilités
+## 🔁 Séparation des responsabilités
 Chaque microservice gère un domaine métier spécifique :
 
 auth-service gère l’inscription, l’authentification et la gestion des tokens.
@@ -88,7 +101,7 @@ reports-service gère la création, la lecture et le stockage des rapports médi
 
 Cela garantit un code plus lisible, des cycles de développement plus rapides, et une meilleure testabilité. De plus, chaque service peut être mis à jour ou redéployé sans impacter les autres.
 
-🐳 Conteneurisation avec Docker
+### 🐳 Conteneurisation avec Docker
 Tous les services sont conteneurisés via Docker, ce qui garantit :
 
 Une isolation des services, évitant les conflits de dépendances.
@@ -97,7 +110,7 @@ Une portabilité accrue, que ce soit en local ou sur un cloud provider.
 
 L’orchestration se fait via docker-compose, qui simplifie le démarrage des services, la création du réseau privé Docker (app-network), et la gestion des volumes (pour persister les données PostgreSQL).
 
-🌉 API Gateway
+### 🌉 API Gateway
 Le gateway joue un rôle central. Il agit comme reverse proxy vers les microservices backend :
 
 Il unifie les points d’accès vers les services (/auth, /reports, /pgadmin).
@@ -106,7 +119,7 @@ Il simplifie la sécurisation et la surveillance, car toutes les requêtes passe
 
 Ce design permet aussi de masquer les ports internes non exposés (8001, 8002) et de ne laisser qu’un seul port public (8000).
 
-🛢️ Bases de données PostgreSQL dédiées
+### 🛢️ Bases de données PostgreSQL dédiées
 Chaque service possède sa propre base de données PostgreSQL :
 
 auth-db pour la gestion des utilisateurs, tokens, etc.
@@ -115,10 +128,10 @@ report-db pour les rapports médicaux.
 
 Cela respecte le principe Database-per-service, ce qui garantit l’indépendance des services, une meilleure sécurité (accès restreint), et facilite l’évolution indépendante du schéma de chaque base.
 
-🖥️ Interface d’administration PgAdmin
+### 🖥️ Interface d’administration PgAdmin
 PgAdmin est intégré dans la stack pour faciliter le debugging, l’audit des données, et la gestion manuelle des bases en phase de développement. Il est accessible via la route /pgadmin du gateway et automatiquement préconfiguré avec les connexions aux bases via le fichier servers.json.
 
-🔐 Sécurité et extensibilité
+### 🔐 Sécurité et extensibilité
 Le design est pensé pour intégrer facilement des mécanismes de sécurité :
 
 Middleware d’authentification dans le gateway pour protéger les routes sensibles.
@@ -127,5 +140,5 @@ Possibilité d’ajouter des vérifications JWT ou OAuth2.
 
 Mise en place future possible de rate-limiting ou d’analyse de logs centralisée.
 
-🧱 Frontend React
+### 🧱 Frontend React
 Le front-end, exposé sur localhost:3000, communique exclusivement via l’API Gateway. Cela permet de changer l’implémentation backend sans impacter l’interface utilisateur, et de centraliser tous les appels API.
