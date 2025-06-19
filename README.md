@@ -4,7 +4,7 @@ de consulter facilement des rapports médicaux.
 
 La stack est composée de plusieurs microservices conteneurisés avec Docker.
 Elle inclut une interface front-end, une API Gateway,
-des services métiers (`auth` et `reports`), 
+des services métiers (`auth` et `reports`),
 deux bases de données PostgreSQL,
 ainsi qu'une interface d’administration via pgAdmin.
 
@@ -75,3 +75,57 @@ bases de données grâce au fichier de config **servers.json** (pgadmin/**server
 - `pgadmin/servers.json` : Configuration PgAdmin
 
 ---
+
+## ⚙️ Explication Choix techniques
+L’architecture Healthstack repose sur une approche moderne orientée microservices, permettant de découpler les responsabilités fonctionnelles (authentification, gestion de rapports médicaux) dans des services indépendants. Ce choix favorise plusieurs avantages cruciaux pour un projet évolutif :
+
+🔁 Séparation des responsabilités
+Chaque microservice gère un domaine métier spécifique :
+
+auth-service gère l’inscription, l’authentification et la gestion des tokens.
+
+reports-service gère la création, la lecture et le stockage des rapports médicaux.
+
+Cela garantit un code plus lisible, des cycles de développement plus rapides, et une meilleure testabilité. De plus, chaque service peut être mis à jour ou redéployé sans impacter les autres.
+
+🐳 Conteneurisation avec Docker
+Tous les services sont conteneurisés via Docker, ce qui garantit :
+
+Une isolation des services, évitant les conflits de dépendances.
+
+Une portabilité accrue, que ce soit en local ou sur un cloud provider.
+
+L’orchestration se fait via docker-compose, qui simplifie le démarrage des services, la création du réseau privé Docker (app-network), et la gestion des volumes (pour persister les données PostgreSQL).
+
+🌉 API Gateway
+Le gateway joue un rôle central. Il agit comme reverse proxy vers les microservices backend :
+
+Il unifie les points d’accès vers les services (/auth, /reports, /pgadmin).
+
+Il simplifie la sécurisation et la surveillance, car toutes les requêtes passent par un seul point.
+
+Ce design permet aussi de masquer les ports internes non exposés (8001, 8002) et de ne laisser qu’un seul port public (8000).
+
+🛢️ Bases de données PostgreSQL dédiées
+Chaque service possède sa propre base de données PostgreSQL :
+
+auth-db pour la gestion des utilisateurs, tokens, etc.
+
+report-db pour les rapports médicaux.
+
+Cela respecte le principe Database-per-service, ce qui garantit l’indépendance des services, une meilleure sécurité (accès restreint), et facilite l’évolution indépendante du schéma de chaque base.
+
+🖥️ Interface d’administration PgAdmin
+PgAdmin est intégré dans la stack pour faciliter le debugging, l’audit des données, et la gestion manuelle des bases en phase de développement. Il est accessible via la route /pgadmin du gateway et automatiquement préconfiguré avec les connexions aux bases via le fichier servers.json.
+
+🔐 Sécurité et extensibilité
+Le design est pensé pour intégrer facilement des mécanismes de sécurité :
+
+Middleware d’authentification dans le gateway pour protéger les routes sensibles.
+
+Possibilité d’ajouter des vérifications JWT ou OAuth2.
+
+Mise en place future possible de rate-limiting ou d’analyse de logs centralisée.
+
+🧱 Frontend React
+Le front-end, exposé sur localhost:3000, communique exclusivement via l’API Gateway. Cela permet de changer l’implémentation backend sans impacter l’interface utilisateur, et de centraliser tous les appels API.
