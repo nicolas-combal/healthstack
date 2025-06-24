@@ -8,7 +8,7 @@ const ROUTES = [
             max: 5
         },
         proxy: {
-            target: "http://auth-service:8001/auth",
+            target: "http://auth-service:8001",
             changeOrigin: true,
             pathRewrite: {
                 [`^/auth`]: '',
@@ -20,7 +20,7 @@ const ROUTES = [
         auth: false,
         creditCheck: false,
         proxy: {
-            target: "http://reports-service:8002/reports",
+            target: "http://reports-service:8002",
             changeOrigin: true,
             pathRewrite: {
                 [`^/reports`]: '',

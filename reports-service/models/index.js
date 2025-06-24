@@ -1,5 +1,5 @@
 const sequelize = require('../config/db.config'); // ✅ Required!
-const Report = require('./models');                // Your Sequelize model
+const Report = require('./report');                // Your Sequelize model
 
 async function initDb() {
   try {

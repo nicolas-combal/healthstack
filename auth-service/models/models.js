@@ -14,10 +14,15 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     unique: true,
   },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
+  password: {
+    type: DataTypes.STRING,
+    unique: false
   },
+  role: {
+    type: DataTypes.STRING,
+    unique: false
+  }
+
 });
 
 module.exports = User;

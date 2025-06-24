@@ -28,9 +28,9 @@ services:
     image: postgres:15
     container_name: auth-db
     environment:
-      POSTGRES_DB: authdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: ${AUTH_DB}
+      POSTGRES_USER: ${AUTH_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5433:5432"
     volumes:
@@ -38,7 +38,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d authdb" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d ${AUTH_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -57,17 +57,18 @@ services:
     environment:
       DB_HOST: auth-db
       DB_PORT: 5432
-      DB_NAME: authdb
-      DB_USER: postgres
-      DB_PASS: yourpassword
+      DB_NAME: ${AUTH_DB}
+      DB_USER: ${AUTH_DB_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
 
   report-db:
     image: postgres:15
     container_name: report-db
     environment:
-      POSTGRES_DB: reportdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: ${REPORT_DB}
+      POSTGRES_USER: ${REPORT_DB_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5435:5432"
     volumes:
@@ -75,7 +76,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d reportdb" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d ${REPORT_DB}" ]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -92,11 +93,12 @@ services:
     networks:
       - app-network
     environment:
-      DB_HOST: report-db # ✅ this must match service name
+      DB_HOST: report-db
       DB_PORT: 5432
-      DB_NAME: reportdb
-      DB_USER: postgres
-      DB_PASS: yourpassword
+      DB_NAME: ${REPORT_DB}
+      DB_USER: ${REPORT_DB_USER}
+      DB_PASS: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
 
   pgadmin:
     image: dpage/pgadmin4
@@ -105,14 +107,15 @@ services:
       - ./pgadmin/servers.json:/pgadmin4/servers.json:ro
     restart: unless-stopped
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     networks:
       - app-network
 
 volumes:
   reportdata:
   pgdata:
+
 
 networks:
   app-network:

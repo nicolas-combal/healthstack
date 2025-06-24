@@ -142,3 +142,23 @@ Mise en place future possible de rate-limiting ou d’analyse de logs centralis�
 
 ### 🧱 Frontend React
 Le front-end, exposé sur localhost:3000, communique exclusivement via l’API Gateway. Cela permet de changer l’implémentation backend sans impacter l’interface utilisateur, et de centraliser tous les appels API.
+
+
+
+## Back end apis
+
+### auth-service
+
+POST `http://localhost:8000/auth/users/login`
+GET  `http://localhost:8000/auth/users/logout`
+GET  `http://localhost:8000/auth/users/`
+
+### reports-service
+
+GET     `http://localhost:8000/reports/`
+GET     `http://localhost:8000/reports/doctors`
+GET     `http://localhost:8000/reports/:id`
+POST    `http://localhost:8000/reports/`
+PUT     `http://localhost:8000/reports/:id`
+DELETE  `http://localhost:8000/reports/:id`
+
