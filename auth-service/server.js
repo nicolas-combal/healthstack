@@ -3,17 +3,15 @@ const swaggerDocs = require('./config/swagger');
 const app = express();
 swaggerDocs(app);
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:4200',
+  credentials: true
+}));
 const port = 8001;
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('<h1>Service Auth</h1>');
-});
-
-// app.listen(port, () => {
-//     console.log(`Auth service listening at http://localhost:${port}`);
-// });
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
 // Connect DB and register routes
 const initDb = require('./models'); // DB connection + sync

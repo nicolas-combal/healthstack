@@ -29,6 +29,20 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get("/check", (req, res) => {
+  const token = req.cookies.jwtToken;
+
+  if (!token) return res.status(401).json({ message: "No token" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ message: "Valid", user: decoded });
+  } catch (err) {
+    console.error("Token verification failed:", err);
+    res.status(401).json({ message: "Invalid token" });
+  }
+});
+
 /**
  * @openapi
  * /users/login:
@@ -52,17 +66,37 @@ router.get('/', async (req, res) => {
  *         description: Authentication failed
  */
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  const loged_user = await User.findOne({where: {name: username, password: password}});
-  const role = loged_user?.role;
-  const user_id = loged_user?.id;
+  try {
+    const { username, password } = req.body;
 
-  if (loged_user){
-    const jwtToken = jwt.sign({ username, role, user_id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.cookie("jwtToken", jwtToken, { httpOnly: true, secure: false });
+    const loged_user = await User.findOne({
+      where: { name: username, password: password }
+    });
+
+    if (!loged_user) {
+      return res.status(401).json({ message: "Authentication failed" });
+    }
+
+    const role = loged_user.role;
+    const user_id = loged_user.id;
+
+    const jwtToken = jwt.sign(
+        { username, role, user_id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+    );
+
+    res.cookie("jwtToken", jwtToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'Lax',
+      maxAge: 3600000
+    });
     res.json(jwtToken);
-  } else {
-    res.status(401).json({ message: "Authentification échouée" });
+
+  } catch (err) {
+    console.error("Connexion error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -76,8 +110,13 @@ router.post("/login", async (req, res) => {
  *         description: Redirect after logout
  */
 router.get("/logout", (req, res) => {
-  res.clearCookie("jwtToken");
-  res.redirect('/auth/users');
-});
+  res.clearCookie("jwtToken", {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'Lax'
+  });
+  res.status(200).json({ message: "Logged out" });
+})
+
 
 module.exports = router;

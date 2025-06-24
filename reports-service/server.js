@@ -8,8 +8,11 @@ const swaggerDocs = require('./config/swagger'); //
 const app = express();
 const port = 8002;
 
-app.use(cors());
-app.use(cookieParser());
+app.use(cors({
+  origin: 'http://localhost:4200',
+  credentials: true
+}));
+app.use(cookieParser())
 app.use(express.json());
 
 swaggerDocs(app); //
