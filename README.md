@@ -164,3 +164,4 @@ POST    `http://localhost:8000/reports/`
 PUT     `http://localhost:8000/reports/:id`
 DELETE  `http://localhost:8000/reports/:id`
 
+GET `http://localhost:8000/reports/api-docs/`
