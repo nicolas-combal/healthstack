@@ -3,16 +3,18 @@ const cors = require('cors');
 const initDb = require('./models');
 const reportsRoutes = require('./routes/reports.routes');
 const cookieParser = require("cookie-parser");
-
+const swaggerDocs = require('./config/swagger'); //
 
 const app = express();
 const port = 8002;
 
 app.use(cors());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(express.json());
 
-app.use('/', reportsRoutes); // ← This handles GET /reports
+swaggerDocs(app); //
+
+app.use('/', reportsRoutes);
 
 initDb().then(() => {
   app.listen(port, () => {

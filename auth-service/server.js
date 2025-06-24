@@ -1,6 +1,7 @@
 const express = require('express');
-
+const swaggerDocs = require('./config/swagger');
 const app = express();
+swaggerDocs(app);
 const cors = require('cors');
 app.use(cors());
 const port = 8001;

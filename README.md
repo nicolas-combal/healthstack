@@ -153,6 +153,8 @@ POST `http://localhost:8000/auth/users/login`
 GET  `http://localhost:8000/auth/users/logout`
 GET  `http://localhost:8000/auth/users/`
 
+GET  `http://localhost:8000/auth/api-docs/`
+
 ### reports-service
 
 GET     `http://localhost:8000/reports/`
