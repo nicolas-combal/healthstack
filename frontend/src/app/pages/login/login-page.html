@@ -1,3 +1,4 @@
+<div class="main-container">
 <mat-card class="login-card">
   <mat-card-title class="title">Login</mat-card-title>
   <mat-card-content>
@@ -12,7 +13,9 @@
         <input matInput [(ngModel)]="password" name="password" type="password" required>
       </mat-form-field>
 
+      <span>First connexion ? <a routerLink="/signup">Sign up</a></span>
       <button mat-raised-button color="primary" type="submit">Login</button>
     </form>
   </mat-card-content>
 </mat-card>
+</div>

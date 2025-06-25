@@ -1,0 +1,26 @@
+<div class="main-container">
+  <mat-card class="signup-card">
+    <mat-card-title class="title">Signup</mat-card-title>
+    <mat-card-content>
+      <form class="column-display" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="username" name="username" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Password</mat-label>
+          <input matInput [(ngModel)]="password" name="password" type="password" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="email" name="email" type="email" required>
+        </mat-form-field>
+
+        <span>Not your first time ? <a routerLink="/login">Login</a></span>
+        <button mat-raised-button color="primary" type="submit">Signup</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
