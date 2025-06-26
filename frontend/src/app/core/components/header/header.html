@@ -1,0 +1,12 @@
+<mat-toolbar class="toolbar">
+  <div class="menu">
+    <button mat-button routerLink="">HealthStack</button>
+    <mat-divider [vertical]="true"></mat-divider>
+    <button mat-button routerLink="/reports">Reports</button>
+    <button mat-button>Other page</button>
+    <button mat-button>Third page</button>
+  </div>
+  <button matIconButton (click)="logout()">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>

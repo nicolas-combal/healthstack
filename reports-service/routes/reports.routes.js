@@ -13,7 +13,7 @@ const { auth, authDoctor } = require('../middleware/auth');
  *       200:
  *         description: List of all reports
  */
-router.get('/', auth, async (req, res) => {
+router.get('/', authDoctor, async (req, res) => {
   try {
     const reports = await Report.findAll();
     res.json(reports);
@@ -62,7 +62,7 @@ router.get("/patient", auth, reportController.listpatient);
  *       200:
  *         description: Single report data
  */
-router.get("/:id", authDoctor, reportController.read);
+router.get("/:id", auth, reportController.read);
 
 /**
  * @openapi
