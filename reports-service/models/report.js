@@ -9,10 +9,10 @@ const Report = sequelize.define('Report', {
         primaryKey: true,
     },
     id_doctor: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
     },
     id_patient: {
-        type: DataTypes.INTEGER
+        type: DataTypes.UUID
     },
     text:{
         type: DataTypes.TEXT

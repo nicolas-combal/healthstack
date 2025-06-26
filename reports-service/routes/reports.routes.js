@@ -34,6 +34,19 @@ router.get('/', auth, async (req, res) => {
  */
 router.get("/doctor", authDoctor, reportController.list);
 
+
+/**
+ * @openapi
+ * /patient:
+ *   get:
+ *     summary: Get reports of a specific patient
+ *     responses:
+ *       200:
+ *         description: Patient-specific reports
+ */
+router.get("/patient", auth, reportController.listpatient);
+
+
 /**
  * @openapi
  * /{id}:

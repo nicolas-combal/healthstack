@@ -9,6 +9,7 @@ function auth(req, res, next){
         if (err) {
             return res.status(401).json({message: "Non autorisé"})
         }
+        req.user_id = decoded.user_id
         next()
     })
 }

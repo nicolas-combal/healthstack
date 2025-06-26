@@ -14,6 +14,18 @@ async function list (req, res){
     }
 }
 
+async function listpatient (req, res){
+    const patientId = req.user_id
+    try {
+        const reports = await Report.findAll({where: {
+            id_patient: patientId
+        }})
+        return res.json(reports);
+    } catch (err) {
+        return res.status(500).json({error: "Database error"})
+    }
+}
+
 async function read (req, res){
     const reportId = req.params.id
     try{
@@ -74,5 +86,6 @@ module.exports = {
     read,
     create,
     update,
-    remove
+    remove,
+    listpatient
 }

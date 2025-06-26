@@ -158,7 +158,8 @@ GET  `http://localhost:8000/auth/api-docs/`
 ### reports-service
 
 GET     `http://localhost:8000/reports/`
-GET     `http://localhost:8000/reports/doctors`
+GET     `http://localhost:8000/reports/doctor`
+GET     `http://localhost:8000/reports/patient`
 GET     `http://localhost:8000/reports/:id`
 POST    `http://localhost:8000/reports/`
 PUT     `http://localhost:8000/reports/:id`
