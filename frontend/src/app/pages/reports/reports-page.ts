@@ -1,16 +1,17 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {DatePipe} from '@angular/common';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatIcon} from '@angular/material/icon';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatIcon } from '@angular/material/icon';
 
-import {ReportsService} from '../../core/services/reports-service/reports-service';
-import {ReportApiResponse, ReportRow} from '../../core/interfaces/reports-interfaces';
-import {AuthService} from '../../core/services/auth-service/auth-service';
-import {CheckAuthApiResponse} from '../../core/interfaces/auth-interfaces';
+import { ReportsService } from '../../core/services/reports-service/reports-service';
+import { ReportApiResponse, ReportRow } from '../../core/interfaces/reports-interfaces';
+import { AuthService } from '../../core/services/auth-service/auth-service';
+import { CheckAuthApiResponse } from '../../core/interfaces/auth-interfaces';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-reports',
@@ -35,8 +36,10 @@ export class ReportsPage implements OnInit {
 
   protected userRole: string = '';
 
-  constructor(private authService: AuthService, private reportsService: ReportsService) {
-  }
+  protected doctorsMap: Map<string, string> = new Map();
+  protected patientsMap: Map<string, string> = new Map();
+
+  constructor(private authService: AuthService, private reportsService: ReportsService) {}
 
   ngOnInit() {
     this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
@@ -44,42 +47,45 @@ export class ReportsPage implements OnInit {
 
       if (this.userRole === 'doctor') {
         this.displayedColumns.push('actions');
-        this.getAllReports();
+        this.fetchAndDisplayReports(this.reportsService.getAllReports.bind(this.reportsService));
       } else {
-        this.getPatientReports();
+        this.fetchAndDisplayReports(this.reportsService.getPatientReports.bind(this.reportsService));
       }
     });
   }
 
-  private getAllReports(): void {
-    this.reportsService.getAllReports().subscribe((apiResponse: ReportApiResponse[]) => {
-      const formattedData: ReportRow[] = apiResponse.map((report: ReportApiResponse) => ({
-        id: report.id,
-        doctorId: report.id_doctor,
-        patientId: report.id_patient,
-        text: report.text,
-        creationDate: report.createdAt,
-        lastUpdate: report.updatedAt
-      }));
+  private fetchAndDisplayReports(fetchFn: () => any): void {
+    this.doctorsMap.clear();
+    this.patientsMap.clear();
 
-      this.dataSource = new MatTableDataSource(formattedData);
-      this.dataSource.paginator = this.paginator;
-    });
-  }
+    fetchFn().subscribe((apiResponse: ReportApiResponse[]) => {
+      const doctorRequests = apiResponse.map(report =>
+        this.authService.getUserById(report.id_doctor)
+      );
+      const patientRequests = apiResponse.map(report =>
+        this.authService.getUserById(report.id_patient)
+      );
 
-  private getPatientReports(): void {
-    this.reportsService.getPatientReports().subscribe((apiResponse: ReportApiResponse[]) => {
-      const formattedData: ReportRow[] = apiResponse.map((report: ReportApiResponse) => ({
-        id: report.id,
-        doctorId: report.id_doctor,
-        patientId: report.id_patient,
-        text: report.text,
-        creationDate: report.createdAt,
-        lastUpdate: report.updatedAt
-      }));
+      forkJoin([forkJoin(doctorRequests), forkJoin(patientRequests)]).subscribe(
+        ([doctorResponses, patientResponses]) => {
+          apiResponse.forEach((report, index) => {
+            this.doctorsMap.set(report.id_doctor, doctorResponses[index].name);
+            this.patientsMap.set(report.id_patient, patientResponses[index].name);
+          });
 
-      this.dataSource = new MatTableDataSource(formattedData);
-      this.dataSource.paginator = this.paginator;
+          const formattedData: ReportRow[] = apiResponse.map((report: ReportApiResponse): ReportRow => ({
+            id: report.id,
+            doctorName: this.doctorsMap.get(report.id_doctor),
+            patientName: this.patientsMap.get(report.id_patient),
+            text: report.text,
+            creationDate: report.createdAt,
+            lastUpdate: report.updatedAt
+          }));
+
+          this.dataSource = new MatTableDataSource(formattedData);
+          this.dataSource.paginator = this.paginator;
+        }
+      );
     });
   }
 

@@ -9,8 +9,8 @@ export interface ReportApiResponse {
 
 export interface ReportRow {
   id: string;
-  doctorId: string;
-  patientId: string;
+  doctorName: string | undefined;
+  patientName: string | undefined;
   text: string;
   creationDate: Date;
   lastUpdate: Date;

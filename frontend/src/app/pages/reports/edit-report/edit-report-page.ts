@@ -59,8 +59,8 @@ export class EditReportPage implements OnInit {
       this.doctorId = report.id_doctor;
       this.patientId = report.id_patient;
       this.reportText = report.text;
-      this.authService.getUserById(this.patientId).subscribe((patientName: string) => {
-        this.patientName = patientName;
+      this.authService.getUserById(this.patientId).subscribe((patient: {name: string}) => {
+        this.patientName = patient.name;
       })
     });
   }
