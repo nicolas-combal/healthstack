@@ -4,16 +4,15 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {CdkTextareaAutosize, TextFieldModule} from '@angular/cdk/text-field';
-import {MatSelect} from '@angular/material/select';
-import {MatOption} from '@angular/material/core';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../../../core/services/auth-service/auth-service';
-import {CheckAuthApiResponse, Patient} from '../../../core/interfaces/auth-interfaces';
+import {CheckAuthApiResponse} from '../../../core/interfaces/auth-interfaces';
 import {ReportsService} from '../../../core/services/reports-service/reports-service';
+import {ReportApiResponse} from '../../../core/interfaces/reports-interfaces';
 
 @Component({
-  selector: 'app-new-report-page',
+  selector: 'app-edit-report-page',
   imports: [
     MatCard,
     FormsModule,
@@ -26,20 +25,19 @@ import {ReportsService} from '../../../core/services/reports-service/reports-ser
     MatFormField,
     MatInput,
     CdkTextareaAutosize,
-    TextFieldModule,
-    MatSelect,
-    MatOption
+    TextFieldModule
   ],
-  templateUrl: './new-report-page.html',
-  styleUrl: './new-report-page.scss'
+  templateUrl: './edit-report-page.html',
+  styleUrl: './edit-report-page.scss'
 })
-export class NewReportPage implements OnInit {
+export class EditReportPage implements OnInit {
 
-  protected patients: Patient[] = [];
+  private reportId: string = '';
 
   protected doctorId: string = '';
 
   protected patientId: string = '';
+  protected patientName: string = '';
   protected reportText: string = '';
 
   constructor(
@@ -49,22 +47,28 @@ export class NewReportPage implements OnInit {
   }
 
   ngOnInit() {
+    this.reportId = this.router.url.split('/')[3]
     this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
       this.doctorId = response.user.user_id;
     })
-    this.fillPatients();
+    this.prefillForm();
   }
 
-  private fillPatients(): void {
-    this.authService.getAllPatients().subscribe((patients: Patient[]) => {
-      this.patients = patients;
+  private prefillForm(): void {
+    this.reportsService.getReportById(this.reportId).subscribe((report: ReportApiResponse) => {
+      this.doctorId = report.id_doctor;
+      this.patientId = report.id_patient;
+      this.reportText = report.text;
+      this.authService.getUserById(this.patientId).subscribe((patientName: string) => {
+        this.patientName = patientName;
+      })
     });
   }
 
   onSubmit(): void {
-    this.reportsService.addReport(this.doctorId, this.patientId, this.reportText).subscribe({
+    this.reportsService.editReport(this.reportId, this.doctorId, this.patientId, this.reportText).subscribe({
       next: () => {
-        alert('Report submitted!');
+        alert('Report edited succesfully!');
         void this.router.navigate(['/reports']);
       },
       error: (error: any) => {

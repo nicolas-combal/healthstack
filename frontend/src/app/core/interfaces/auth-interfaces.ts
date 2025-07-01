@@ -11,5 +11,5 @@ export interface CheckAuthApiResponse {
 
 export interface Patient {
   id: string;
-  username: string;
+  name: string;
 }

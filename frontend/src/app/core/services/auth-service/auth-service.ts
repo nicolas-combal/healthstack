@@ -22,6 +22,10 @@ export class AuthService {
     return this.http.get<Patient[]>(this.AUTH_API_URL + '/patients', { withCredentials: true });
   }
 
+  getUserById(id: string) {
+    return this.http.get<string>(this.AUTH_API_URL + '/' + id, { withCredentials: true });
+  }
+
   signup(username: string, password: string, email: string, role: string){
     return this.http.post(this.AUTH_API_URL + "/signup", {username: username, password: password, email: email, role: role}, { withCredentials: true });
   }

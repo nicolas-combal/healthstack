@@ -7,4 +7,21 @@
 
 .table-card {
   padding: 3rem;
+  width: 90%;
+}
+
+.table-row:hover {
+  background-color: #f0f0ff;
+}
+
+.edit-icon {
+  color: green;
+}
+
+.delete-icon {
+  color: red;
+}
+
+.new-report-button {
+  align-self: flex-start;
 }

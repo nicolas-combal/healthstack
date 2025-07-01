@@ -8,6 +8,7 @@ export interface ReportApiResponse {
 }
 
 export interface ReportRow {
+  id: string;
   doctorId: string;
   patientId: string;
   text: string;

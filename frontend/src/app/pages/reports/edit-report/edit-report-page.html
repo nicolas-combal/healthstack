@@ -1,17 +1,12 @@
 <div class="main-container">
   <mat-card class="form-card">
-    <mat-card-title class="title">New report</mat-card-title>
+    <mat-card-title class="title">Edit report</mat-card-title>
     <mat-card-content>
       <form class="column-display" (ngSubmit)="onSubmit()">
 
         <mat-form-field appearance="fill">
           <mat-label>Patient</mat-label>
-          <mat-select [(ngModel)]="patientId" name="patientId" required>
-            @for (patient of patients; track patient) {
-              <mat-option [value]="patient.id">{{ patient.name }}</mat-option>
-            }
-          </mat-select>
-
+          <input matInput disabled value="{{patientName}}">
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -24,7 +19,7 @@
                     cdkAutosizeMaxRows="5"></textarea>
         </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit">Submit</button>
+        <button mat-raised-button color="primary" type="submit">Edit</button>
       </form>
     </mat-card-content>
   </mat-card>
