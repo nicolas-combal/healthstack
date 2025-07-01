@@ -74,6 +74,24 @@ router.get('/patients',authDoctor, async (req, res) => {
 });
 
 
+router.get('/:id', async(req, res) => {
+  const userId = req.params.id
+  try {
+    const user = await User.findByPk(userId, {
+      attributes: ['name']
+    })
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(user)
+  } catch (err) {
+    res.status(500).json({error: `Database error ${err}`})
+  }
+})
+
+
+
+
 router.get("/check", (req, res) => {
   const token = req.cookies.jwtToken;
 
