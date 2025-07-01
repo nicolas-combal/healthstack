@@ -154,6 +154,8 @@ GET  `http://localhost:8000/auth/users/logout`
 GET  `http://localhost:8000/auth/users/`
 POST `http://localhost:8000/auth/users/signup`
 GET `http://localhost:8000/auth/users/patients`
+GET `http://localhost:8000/auth/users/name/:id`
+
 
 
 GET  `http://localhost:8000/auth/api-docs/`

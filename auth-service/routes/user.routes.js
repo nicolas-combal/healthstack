@@ -74,20 +74,47 @@ router.get('/patients',authDoctor, async (req, res) => {
 });
 
 
-router.get('/:id', async(req, res) => {
-  const userId = req.params.id
+/**
+ * @swagger
+ * /auth/users/name/{id}:
+ *   get:
+ *     summary: Récupérer uniquement le nom d’un utilisateur via son ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: UUID de l'utilisateur
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Nom récupéré avec succès
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: nico
+ */
+router.get('/name/:id', async (req, res) => {
+  const userId = req.params.id;
   try {
     const user = await User.findByPk(userId, {
       attributes: ['name']
-    })
+    });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    res.json(user)
+    res.json(user); // ou res.json({ name: user.name }) si tu veux plus simple
   } catch (err) {
-    res.status(500).json({error: `Database error ${err}`})
+    res.status(500).json({ error: `Database error ${err}` });
   }
-})
+});
+
 
 
 
