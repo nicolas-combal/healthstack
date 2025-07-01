@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
+const { auth, authDoctor } = require('../middleware/auth');
 
 const User = require('../models/models');
 
@@ -29,6 +30,49 @@ router.get('/', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+
+
+/**
+ * @openapi
+ * /allusers:
+ *   get:
+ *     summary: Get all users with role "user"
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: List of users with role "user"
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "8a7c6b60-0a0b-4eae-8de5-9b22d2f5ec52"
+ *                   name:
+ *                     type: string
+ *                     example: "John Doe"
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/patients',authDoctor, async (req, res) => {
+  try {
+    const users = await User.findAll({
+      where: { role: 'user' },
+      attributes: ['id', 'name']
+    });
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 router.get("/check", (req, res) => {
   const token = req.cookies.jwtToken;

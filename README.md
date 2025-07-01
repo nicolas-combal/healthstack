@@ -152,6 +152,9 @@ Le front-end, exposé sur localhost:3000, communique exclusivement via l’API G
 POST `http://localhost:8000/auth/users/login`
 GET  `http://localhost:8000/auth/users/logout`
 GET  `http://localhost:8000/auth/users/`
+POST `http://localhost:8000/auth/users/signup`
+GET `http://localhost:8000/auth/users/patients`
+
 
 GET  `http://localhost:8000/auth/api-docs/`
 
