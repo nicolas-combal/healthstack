@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {CheckAuthApiResponse} from '../../interfaces/auth-interfaces';
+import {CheckAuthApiResponse, Patient} from '../../interfaces/auth-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,10 @@ export class AuthService {
 
   checkAuth() {
     return this.http.get<CheckAuthApiResponse>(this.AUTH_API_URL + '/check', { withCredentials: true });
+  }
+
+  getAllPatients() {
+    return this.http.get<Patient[]>(this.AUTH_API_URL + '/patients', { withCredentials: true });
   }
 
   signup(username: string, password: string, email: string, role: string){

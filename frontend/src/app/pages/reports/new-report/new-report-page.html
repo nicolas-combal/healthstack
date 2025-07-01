@@ -1,0 +1,30 @@
+<div class="main-container">
+  <mat-card class="form-card">
+    <mat-card-title class="title">New report</mat-card-title>
+    <mat-card-content>
+      <form class="column-display" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="fill">
+          <mat-label>Patient</mat-label>
+          <mat-select [(ngModel)]="patientId" >
+            @for (patient of patients; track patient) {
+              <mat-option [value]="patient.id">{{ patient.username }}</mat-option>
+            }
+          </mat-select>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Rapport</mat-label>
+          <textarea matInput
+                    [(ngModel)]="reportText"
+                    cdkTextareaAutosize
+                    cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="5"></textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

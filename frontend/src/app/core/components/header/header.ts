@@ -23,7 +23,7 @@ export class Header {
   constructor(private authService: AuthService, private router: Router) {
   }
 
-  logout() {
+  logout(): void {
     this.authService.logout().subscribe(() => {
         void this.router.navigate(['/login']);
       }

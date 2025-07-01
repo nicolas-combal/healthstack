@@ -1,0 +1,24 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.login-card {
+  width: fit-content;
+  justify-self: center;
+}
+
+.title {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+}
+
+.column-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}

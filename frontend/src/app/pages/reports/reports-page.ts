@@ -1,18 +1,23 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatButton} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
+import {RouterLink} from '@angular/router';
 
 import {ReportsService} from '../../core/services/reports-service/reports-service';
 import {ReportApiResponse, ReportRow} from '../../core/interfaces/reports-interfaces';
 import {AuthService} from '../../core/services/auth-service/auth-service';
+import {CheckAuthApiResponse} from '../../core/interfaces/auth-interfaces';
 
 @Component({
   selector: 'app-reports',
   imports: [
+    MatButton,
     MatCardModule,
     MatPaginator,
-    MatTableModule
+    MatTableModule,
+    RouterLink
   ],
   templateUrl: './reports-page.html',
   styleUrl: './reports-page.scss'
@@ -29,7 +34,7 @@ export class ReportsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.checkAuth().subscribe((response) => {
+    this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
       this.userRole = response.user.role;
     });
 

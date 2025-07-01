@@ -8,3 +8,8 @@ export interface CheckAuthApiResponse {
     exp: number;
   }
 }
+
+export interface Patient {
+  id: string;
+  username: string;
+}

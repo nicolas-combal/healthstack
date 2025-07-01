@@ -20,4 +20,8 @@ export class ReportsService {
   getPatientReports(){
     return this.http.get<ReportApiResponse[]>(this.REPORTS_API_URL + "/patient", { withCredentials: true });
   }
+
+  addReport(id_doctor: string, id_patient: string, text: string){
+    return this.http.post(this.REPORTS_API_URL, { withCredentials: true });
+  }
 }
