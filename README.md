@@ -1,11 +1,11 @@
 # 🧱 Healthstack
 
-## Explication de Projet
+## Explication du Projet
 
 Le projet a pour objectif de développer une plateforme de gestion de rapports médicaux accessible via une interface web.
 Cette solution est destinée à faciliter le suivi médical des patients, tout en garantissant la sécurité et la confidentialité des données de santé.
 
-Trois types d’utilisateurs interagissent avec la plateforme :
+Trois types d’utilisateurs intéragissent avec la plateforme :
 
 Les médecins peuvent se connecter à leur espace sécurisé afin de créer, modifier, consulter et archiver des rapports médicaux pour les patients qu’ils suivent. Ils disposent d’un accès complet aux informations nécessaires à la prise en charge médicale.
 
@@ -40,7 +40,7 @@ docker-compose up --build
 
 Ensuite, accédez à :
 
-- Frontend : http://localhost:3000
+- Frontend : http://localhost:4200
 - Service Auth : http://localhost:8000/auth
 - Service Reports : http://localhost:8000/reports
 - PgAdmin : http://localhost:8000/pgadmin
@@ -55,15 +55,15 @@ Ensuite, accédez à :
 
 ## 🧩 Services
 
-| Service         | Description                | Port interne | Exposé ? | Adresse d'accès                        |
-|----------------|----------------------------|--------------|----------|----------------------------------------|
-| `app-front`     | Frontend React             | 3000         | ✅       | http://localhost:3000                  |
-| `gateway`       | API Gateway Express        | 8000         | ✅       | http://localhost:8000                  |
-| `auth-service`  | Authentification, login, register | 8001         | ❌       | via gateway → `/auth`                  |
-| `reports-service`| Génération et accès aux rapports | 8002         | ❌       | via gateway → `/reports`               |
-| `auth-db`       | Base PostgreSQL de `auth-service` | 5432         | ❌       | Accessible uniquement en réseau Docker |
+| Service         | Description                          | Port interne | Exposé ? | Adresse d'accès                       |
+|----------------|--------------------------------------|--------------|----------|---------------------------------------|
+| `app-front`     | Frontend Angular                     | 4200         | ✅       | http://localhost:4200                 |
+| `gateway`       | API Gateway Express                  | 8000         | ✅       | http://localhost:8000                 |
+| `auth-service`  | Authentification, login, register    | 8001         | ❌       | via gateway → `/auth`                 |
+| `reports-service`| Génération et accès aux rapports     | 8002         | ❌       | via gateway → `/reports`              |
+| `auth-db`       | Base PostgreSQL de `auth-service`    | 5432         | ❌       | Accessible uniquement en réseau Docker |
 | `report-db`     | Base PostgreSQL de `reports-service` | 5432         | ❌       | Accessible uniquement en réseau Docker |
-| `pgadmin`       | Interface admin PostgreSQL | 80           | ❌       | via gateway → `/pgadmin`               |
+| `pgadmin`       | Interface admin PostgreSQL           | 80           | ❌       | via gateway → `/pgadmin`              |
 
 ---
 
@@ -148,8 +148,8 @@ Possibilité d’ajouter des vérifications JWT ou OAuth2.
 
 Mise en place future possible de rate-limiting ou d’analyse de logs centralisée.
 
-### 🧱 Frontend React
-Le front-end, exposé sur localhost:3000, communique exclusivement via l’API Gateway. Cela permet de changer l’implémentation backend sans impacter l’interface utilisateur, et de centraliser tous les appels API.
+### 🧱 Frontend Angular
+Le front-end, exposé sur localhost:4200, communique exclusivement via l’API Gateway. Cela permet de changer l’implémentation backend sans impacter l’interface utilisateur, et de centraliser tous les appels API.
 
 
 
@@ -157,23 +157,25 @@ Le front-end, exposé sur localhost:3000, communique exclusivement via l’API G
 
 ### auth-service
 
-POST `http://localhost:8000/auth/users/login`
-GET  `http://localhost:8000/auth/users/logout`
-GET  `http://localhost:8000/auth/users/`
-POST `http://localhost:8000/auth/users/signup`
-GET `http://localhost:8000/auth/users/patients`
-GET `http://localhost:8000/auth/users/name/:id`
+- POST `http://localhost:8000/auth/users/login`
+- GET  `http://localhost:8000/auth/users/logout`
+- GET  `http://localhost:8000/auth/users/`
+- POST `http://localhost:8000/auth/users/signup`
+- GET `http://localhost:8000/auth/users/patients`
+- GET `http://localhost:8000/auth/users/name/:id`
 
-GET  `http://localhost:8000/auth/api-docs/`
+
+- GET  `http://localhost:8000/auth/api-docs/`
 
 ### reports-service
 
-GET     `http://localhost:8000/reports/`
-GET     `http://localhost:8000/reports/doctor`
-GET     `http://localhost:8000/reports/patient`
-GET     `http://localhost:8000/reports/:id`
-POST    `http://localhost:8000/reports/`
-PUT     `http://localhost:8000/reports/:id`
-DELETE  `http://localhost:8000/reports/:id`
+- GET     `http://localhost:8000/reports/`
+- GET     `http://localhost:8000/reports/doctor`
+- GET     `http://localhost:8000/reports/patient`
+- GET     `http://localhost:8000/reports/:id`
+- POST    `http://localhost:8000/reports/`
+- PUT     `http://localhost:8000/reports/:id`
+- DELETE  `http://localhost:8000/reports/:id`
 
-GET `http://localhost:8000/reports/api-docs/`
+
+- GET `http://localhost:8000/reports/api-docs/`
