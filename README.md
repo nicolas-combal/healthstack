@@ -21,6 +21,14 @@ des services métiers (`auth` et `reports`),
 deux bases de données PostgreSQL,
 ainsi qu'une interface d’administration via pgAdmin.
 
+### Fonctionnalités principales
+- Les médecins peuvent créer, modifier, consulter et archiver des rapports médicaux, et accéder à l’historique des patients.
+- Les patients consultent uniquement leurs propres rapports dans un espace personnel sécurisé.
+- Le service auth-service gère la création de comptes, la connexion, la déconnexion et l’attribution des rôles.
+- Le service reports-service permet la gestion complète des rapports (création, lecture, mise à jour, suppression).
+- L’interface d’administration permet de superviser la plateforme et gérer les comptes en garantissant la sécurité des données.
+
+
 ---
 
 ## 🚀 Lancer le projet
@@ -155,8 +163,6 @@ GET  `http://localhost:8000/auth/users/`
 POST `http://localhost:8000/auth/users/signup`
 GET `http://localhost:8000/auth/users/patients`
 GET `http://localhost:8000/auth/users/name/:id`
-
-
 
 GET  `http://localhost:8000/auth/api-docs/`
 
