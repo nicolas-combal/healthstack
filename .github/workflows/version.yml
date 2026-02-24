@@ -17,18 +17,33 @@ jobs:
         with:
           fetch-depth: 0
 
+      # ---------------------------
+      # Get last tag safely
+      # ---------------------------
       - name: Get last tag
         id: lasttag
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+          if git describe --tags --abbrev=0 >/dev/null 2>&1; then
+            echo "last_tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+          else
+            echo "last_tag=" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Get commits since last tag
-        id: commits
+      # ---------------------------
+      # Get commits safely
+      # ---------------------------
+      - name: Get commits
         run: |
-          git log ${{ steps.lasttag.outputs.last_tag }}..HEAD --pretty=format:"%s" > commits.txt
+          if [ -z "${{ steps.lasttag.outputs.last_tag }}" ]; then
+            git log --pretty=format:"%s" > commits.txt
+          else
+            git log ${{ steps.lasttag.outputs.last_tag }}..HEAD --pretty=format:"%s" > commits.txt
+          fi
 
-      - name: Determine version bump
+      # ---------------------------
+      # Calculate version
+      # ---------------------------
+      - name: Calculate version
         id: bump
         run: |
           MAJOR=0
@@ -45,37 +60,68 @@ jobs:
             fi
           done < commits.txt
 
-          VERSION=${{ steps.lasttag.outputs.last_tag }}
-          VERSION=${VERSION#v}
-          IFS='.' read -r major minor patch <<< "$VERSION"
-
-          if [ $MAJOR -eq 1 ]; then
-            major=$((major+1)); minor=0; patch=0
-          elif [ $MINOR -eq 1 ]; then
-            minor=$((minor+1)); patch=0
-          elif [ $PATCH -eq 1 ]; then
-            patch=$((patch+1))
+          # If no tag exists → start at 0.1.0
+          if [ -z "${{ steps.lasttag.outputs.last_tag }}" ]; then
+            if [ $MAJOR -eq 1 ]; then
+              NEW_VERSION="v1.0.0"
+            elif [ $MINOR -eq 1 ]; then
+              NEW_VERSION="v0.1.0"
+            elif [ $PATCH -eq 1 ]; then
+              NEW_VERSION="v0.0.1"
+            else
+              echo "release=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
           else
-            echo "No version change"
-            exit 0
+            VERSION=${{ steps.lasttag.outputs.last_tag }}
+            VERSION=${VERSION#v}
+            IFS='.' read -r major minor patch <<< "$VERSION"
+
+            if [ $MAJOR -eq 1 ]; then
+              major=$((major+1)); minor=0; patch=0
+            elif [ $MINOR -eq 1 ]; then
+              minor=$((minor+1)); patch=0
+            elif [ $PATCH -eq 1 ]; then
+              patch=$((patch+1))
+            else
+              echo "release=false" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+            NEW_VERSION="v$major.$minor.$patch"
           fi
 
-          NEW_VERSION="v$major.$minor.$patch"
+          echo "release=true" >> $GITHUB_OUTPUT
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
+      # ---------------------------
+      # Stop if no release
+      # ---------------------------
+      - name: Stop if no release
+        if: steps.bump.outputs.release != 'true'
+        run: echo "No version change"
+
+      # ---------------------------
+      # Create tag
+      # ---------------------------
       - name: Create tag
+        if: steps.bump.outputs.release == 'true'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git tag ${{ steps.bump.outputs.new_version }}
           git push origin ${{ steps.bump.outputs.new_version }}
 
+      # ---------------------------
+      # Update CHANGELOG
+      # ---------------------------
       - name: Update CHANGELOG
+        if: steps.bump.outputs.release == 'true'
         run: |
           echo "## ${{ steps.bump.outputs.new_version }}" >> CHANGELOG.md
           echo "" >> CHANGELOG.md
           cat commits.txt >> CHANGELOG.md
           echo "" >> CHANGELOG.md
           git add CHANGELOG.md
-          git commit -m "chore: update changelog"
+          git commit -m "chore: update changelog [skip ci]"
           git push
