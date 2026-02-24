@@ -1,0 +1,81 @@
+name: Auto Version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get last tag
+        id: lasttag
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "last_tag=$LAST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Get commits since last tag
+        id: commits
+        run: |
+          git log ${{ steps.lasttag.outputs.last_tag }}..HEAD --pretty=format:"%s" > commits.txt
+
+      - name: Determine version bump
+        id: bump
+        run: |
+          MAJOR=0
+          MINOR=0
+          PATCH=0
+
+          while read line; do
+            if [[ "$line" == *"BREAKING CHANGE"* ]]; then
+              MAJOR=1
+            elif [[ "$line" == feat:* ]]; then
+              MINOR=1
+            elif [[ "$line" == fix:* ]]; then
+              PATCH=1
+            fi
+          done < commits.txt
+
+          VERSION=${{ steps.lasttag.outputs.last_tag }}
+          VERSION=${VERSION#v}
+          IFS='.' read -r major minor patch <<< "$VERSION"
+
+          if [ $MAJOR -eq 1 ]; then
+            major=$((major+1)); minor=0; patch=0
+          elif [ $MINOR -eq 1 ]; then
+            minor=$((minor+1)); patch=0
+          elif [ $PATCH -eq 1 ]; then
+            patch=$((patch+1))
+          else
+            echo "No version change"
+            exit 0
+          fi
+
+          NEW_VERSION="v$major.$minor.$patch"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag ${{ steps.bump.outputs.new_version }}
+          git push origin ${{ steps.bump.outputs.new_version }}
+
+      - name: Update CHANGELOG
+        run: |
+          echo "## ${{ steps.bump.outputs.new_version }}" >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          cat commits.txt >> CHANGELOG.md
+          echo "" >> CHANGELOG.md
+          git add CHANGELOG.md
+          git commit -m "chore: update changelog"
+          git push
