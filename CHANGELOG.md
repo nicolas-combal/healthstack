@@ -47,3 +47,7 @@ Initial commit
 
 fix: fix texting
 chore: update changelog [skip ci]
+## v1.0.0
+
+BREAKING CHANGE: updat contributing
+chore: update changelog [skip ci]
