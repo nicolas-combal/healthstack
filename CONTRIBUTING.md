@@ -46,7 +46,6 @@ Voici le cycle standard d’un ticket :
 
 - Estimation des story points
 
-## 2️⃣ Création de la branche
 
 ## 2️⃣ Création de la branche
 
@@ -66,12 +65,44 @@ Exemples :
 git commit -m "Fix(auth): add first issue implementation  (#4)"
 ```
 
+
+###  Versioning automatique – Conventional Commits
+
+Nous utilisons le **Semantic Versioning** :
+MAJOR.MINOR.PATCH
+
+La version est mise à jour automatiquement en fonction des messages de commit lors du merge vers `main`.
+
+### Format obligatoire des commits
+
+```
+type(scope): description courte
+```
+
+### Exemples :
+
+```
+feat(auth): ajout de l’authentification JWT (#4)
+fix(api): correction d’un bug de validation (#4)
+```
+
+### Impact sur la version
+
+| Type de commit | Impact |
+|---------------|--------|
+| `feat:` | ⬆ MINOR (ex: 1.4.2 → 1.5.0) |
+| `fix:` | ⬆ PATCH (ex: 1.4.2 → 1.4.3) |
+| `BREAKING CHANGE:` | ⬆ MAJOR (ex: 1.4.2 → 2.0.0) |
+| autres (`docs`, `chore`, `refactor`, etc.) | pas de nouvelle version |
+
+
+
 - Tests
 
 ## 4️⃣ Pull Request vers develop
 
 - Ouverture d’une Pull Request vers **develop**
-- Déplacement du ticket dans **"In Review"** / **"À valider"** (manuel ou automatique selon config GitHub Projects)
+- Déplacement du ticket dans **"In Review"** / **"À valider"**
 - Code review obligatoire
 - Corrections si demandées
 
