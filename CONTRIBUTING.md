@@ -48,7 +48,9 @@ Voici le cycle standard d’un ticket :
 
 ## 2️⃣ Création de la branche
 
-La création de la branche se fait automatiquement à la création du ticket
+## 2️⃣ Création de la branche
+
+La branche est créée depuis l’Issue GitHub (bouton **"Create a branch"**) ou manuellement en local, en incluant le numéro du ticket dans le nom de la branche.
 
 ## 3️⃣ Développement
 
@@ -61,26 +63,32 @@ La création de la branche se fait automatiquement à la création du ticket
 ```
 Exemples :
 
-feature/US12345-login-page
-
-fix/login-validation
+git commit -m "Fix(auth): add first issue implementation  (#4)"
 ```
 
 - Tests
 
 ## 4️⃣ Pull Request vers develop
 
-- Déplacement du ticket dans "A valider"
-
+- Ouverture d’une Pull Request vers **develop**
+- Déplacement du ticket dans **"In Review"** / **"À valider"** (manuel ou automatique selon config GitHub Projects)
 - Code review obligatoire
-
 - Corrections si demandées
+
+```
+Exemples (description de PR) :
+
+Implements authentication logic.
+
+Closes #4
+```
 
 ## 5️⃣ Merge dans develop
 
 - Suppression de la branche feature
+- L’issue peut être fermée automatiquement si la PR contient **Closes #X** (selon la branche cible et la configuration GitHub)
+- Déplacement du ticket dans la colonne **"Done"** / **"Terminé"** (manuel ou automatique)
 
-- Déplacement du ticket dans la colonne "Terminé"
 
 ## 6️⃣ Release
 
