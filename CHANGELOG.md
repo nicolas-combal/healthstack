@@ -43,3 +43,7 @@ services
 Added docker to the app
 Added 2 services and linked them to the proxy
 Initial commit
+## v0.1.1
+
+fix: fix texting
+chore: update changelog [skip ci]
