@@ -36,6 +36,8 @@ Exemple : **1.4.2**
 
 # 🔄 Workflow – Cycle de vie d’une feature
 
+L'état d'avancement de chaque tâche doit toujours être consultable sur notre Kanban : https://github.com/users/iliasynov/projects/2/views/2
+
 Voici le cycle standard d’un ticket :
 
 ## 1️⃣ Création du ticket
