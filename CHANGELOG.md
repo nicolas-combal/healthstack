@@ -60,3 +60,8 @@ Added storybook doc for the front
 Merge branch 'main' of https://github.com/nicolas-combal/healthstack
 Added Kanban link to CONTRIBUTING.md
 chore: update changelog [skip ci]
+## v1.2.0
+
+Merge pull request #24 from nicolas-combal/19-sous-tâches-frontend-epic5
+feat: afficher le nombre de pation par medecins au niveau du front (#19)
+chore: update changelog [skip ci]
