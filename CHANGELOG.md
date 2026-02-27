@@ -51,3 +51,12 @@ chore: update changelog [skip ci]
 
 BREAKING CHANGE: updat contributing
 chore: update changelog [skip ci]
+## v1.1.0
+
+Merge pull request #23 from nicolas-combal/18-sous-tâches-backend-epic5
+feat: ajout get stats /reports/countPatientsByDoctor - Closes #18
+Fixed a bug
+Added storybook doc for the front
+Merge branch 'main' of https://github.com/nicolas-combal/healthstack
+Added Kanban link to CONTRIBUTING.md
+chore: update changelog [skip ci]
