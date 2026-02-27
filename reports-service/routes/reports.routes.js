@@ -4,6 +4,10 @@ const Report = require('../models/report');
 const reportController = require('../controllers/report');
 const { auth, authDoctor } = require('../middleware/auth');
 
+
+router.get("/countPatientsByDoctor", authDoctor, reportController.countPatientsByDoctor);
+
+
 /**
  * @openapi
  * /:
@@ -108,5 +112,8 @@ router.put("/:id", authDoctor, reportController.update);
  *         description: Report deleted
  */
 router.delete("/:id", authDoctor, reportController.remove);
+
+
+
 
 module.exports = router;
