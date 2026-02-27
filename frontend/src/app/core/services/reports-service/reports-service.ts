@@ -17,6 +17,12 @@ export class ReportsService {
     return this.http.get<ReportApiResponse[]>(this.REPORTS_API_URL, { withCredentials: true });
   }
 
+  getCountPatientsByDoctor() {
+    return this.http.get<{ patientCount: number }>(
+      '/countPatientsByDoctor'
+    );
+  }
+
   getReportById(id: string){
     return this.http.get<ReportApiResponse>(this.REPORTS_API_URL + "/" + id, { withCredentials: true });
   }
