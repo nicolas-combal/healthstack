@@ -1,5 +1,5 @@
 const Report  = require('../models/report');
-
+const { Op, fn, col } = require("sequelize");
 
 async function list (req, res){
     const doctorId = req.user_id
@@ -81,11 +81,29 @@ async function remove (req, res){
     }
 }
 
+
+async function countPatientsByDoctor(req, res) {
+    try {
+      const number = Math.floor(Math.random() * 21);
+
+      res.json({
+        value: number
+      });
+
+    } catch (err) {
+      res.status(500).json({
+        message: "Cannot generate random number"
+      });
+    }
+}
+
+
 module.exports = {
     list,
     read,
     create,
     update,
     remove,
-    listpatient
+    listpatient,
+    countPatientsByDoctor
 }
