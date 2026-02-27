@@ -133,6 +133,23 @@ router.get("/check", (req, res) => {
   }
 });
 
+router.get("/me", auth, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user_id, {
+      attributes: ["id", "name", "email", "role", "createdAt", "updatedAt"],
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.json(user);
+  } catch (err) {
+    console.error("Fetch current user error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 /**
  * @openapi
  * /users/signup:
@@ -178,6 +195,11 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    const existingEmail = await User.findOne({ where: { email } });
+    if (existingEmail) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -214,6 +236,9 @@ router.post("/signup", async (req, res) => {
 
   } catch (err) {
     console.error("Signup error:", err);
+    if (err.name === "SequelizeUniqueConstraintError") {
+      return res.status(400).json({ message: "Email must be unique" });
+    }
     res.status(500).json({ error: "Internal server error" });
   }
 });

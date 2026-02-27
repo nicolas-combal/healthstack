@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
-import {CheckAuthApiResponse, Patient} from '../../interfaces/auth-interfaces';
+import {CheckAuthApiResponse, CurrentUserProfile, Patient} from '../../interfaces/auth-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,10 @@ export class AuthService {
 
   getAllPatients() {
     return this.http.get<Patient[]>(this.AUTH_API_URL + '/patients', {withCredentials: true});
+  }
+
+  getCurrentUser() {
+    return this.http.get<CurrentUserProfile>(this.AUTH_API_URL + '/me', {withCredentials: true});
   }
 
   getUserById(id: string) {

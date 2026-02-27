@@ -13,3 +13,9 @@ export interface Patient {
   id: string;
   name: string;
 }
+
+export interface CurrentUserProfile {
+  id: string;
+  name: string;
+  email: string;
+}
