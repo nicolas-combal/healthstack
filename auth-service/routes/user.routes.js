@@ -73,6 +73,57 @@ router.get('/patients',authDoctor, async (req, res) => {
   }
 });
 
+/**
+ * @openapi
+ * /users/me:
+ *   get:
+ *     summary: Get the authenticated user's profile
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: Current user profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       401:
+ *         description: Missing or invalid token
+ *       404:
+ *         description: User not found
+ */
+router.get('/me', auth, async (req, res) => {
+  try {
+    if (!req.user_id) {
+      return res.status(401).json({ message: 'Non autorisé' });
+    }
+
+    const user = await User.findByPk(req.user_id, {
+      attributes: ['id', 'name', 'email']
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      id: user.id,
+      name: user.name,
+      email: user.email
+    });
+  } catch (err) {
+    console.error('Error fetching /users/me:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 /**
  * @swagger
