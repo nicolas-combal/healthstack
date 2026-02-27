@@ -1,1 +1,10 @@
 <h1 class="title">Home Page</h1>
+
+<section *ngIf="loading">Chargement du profil...</section>
+
+<section *ngIf="error && !loading" class="error">{{ error }}</section>
+
+<section *ngIf="user && !loading">
+	<p>Nom : {{ user.name }}</p>
+	<p>Email : {{ user.email }}</p>
+</section>
