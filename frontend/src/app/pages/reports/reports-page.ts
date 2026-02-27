@@ -31,6 +31,8 @@ import { forkJoin } from 'rxjs';
 export class ReportsPage implements OnInit {
   protected dataSource: MatTableDataSource<ReportRow> = new MatTableDataSource();
   protected displayedColumns: string[] = ['doctorId', 'patientId', 'text', 'creationDate', 'lastUpdate'];
+  protected patientCount: number = 0;
+
 
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator();
 
@@ -47,6 +49,11 @@ export class ReportsPage implements OnInit {
 
       if (this.userRole === 'doctor') {
         this.displayedColumns.push('actions');
+        this.reportsService.getCountPatientsByDoctor().subscribe(
+          (apiResponse: { patientCount: number }) => {
+            this.patientCount = apiResponse.patientCount;
+          }
+        );
         this.fetchAndDisplayReports(this.reportsService.getAllReports.bind(this.reportsService));
       } else {
         this.fetchAndDisplayReports(this.reportsService.getPatientReports.bind(this.reportsService));
