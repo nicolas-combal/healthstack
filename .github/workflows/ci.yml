@@ -16,21 +16,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4          # ✅ upgraded from v3
 
-    - name: Set up environment variables
-      run: |
-        cp .env.ci .env
+      - name: Set up environment variables
+        run: cp .env.ci .env
 
-    - name: Debug Docker
-      run: |
-        docker info
-        docker network ls
+      - name: Load .env into environment   # ✅ makes APP_NETWORK available to subsequent steps
+        run: |
+          grep -v '^\s*#' .env | grep '=' >> $GITHUB_ENV
 
-    - name: Build and run Docker containers
-      run: |
-        if ! docker network ls | grep -q $APP_NETWORK; then
-          docker network create --driver bridge $APP_NETWORK
-        fi
-        docker-compose up --build
+      - name: Debug Docker
+        run: |
+          docker info
+          docker network ls
+
+      - name: Create Docker network
+        run: |
+          if ! docker network ls | grep -q "$APP_NETWORK"; then
+            docker network create --driver bridge "$APP_NETWORK"
+          fi
+
+      - name: Build and run Docker containers
+        run: |
+          docker compose up --build --detach   # ✅ --detach so CI doesn't hang
+          docker compose ps                     # show running services for logs
+
+      - name: Wait for services to be healthy
+        run: |
+          docker compose wait auth-db report-db  # blocks until healthchecks pass
+
+      - name: Run tests                          # placeholder — add your actual test command
+        run: |
+          docker compose exec api-gateway npm test
+
+      - name: Tear down
+        if: always()                             # ✅ cleanup even on failure
+        run: docker compose down -v
