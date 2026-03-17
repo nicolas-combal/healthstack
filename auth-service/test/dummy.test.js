@@ -1,5 +1,3 @@
-describe('Dummy Test Suite', () => {
-  it('should always pass', () => {
-    expect(true).toBe(true);
-  });
+test('simplest test ever', () => {
+  expect(1).toBe(1);
 });
