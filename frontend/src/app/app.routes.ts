@@ -7,6 +7,7 @@ import {SignupPage} from './pages/signup/signup-page';
 import {ReportsPage} from './pages/reports/reports-page';
 import {NewReportPage} from './pages/reports/new-report/new-report-page';
 import {EditReportPage} from './pages/reports/edit-report/edit-report-page';
+import { NotFoundPage } from './pages/not-found-page/not-found-page';
 
 export const routes: Routes = [
   {path: '', component: HomePage, canActivate: [AuthGuard] },
@@ -15,5 +16,5 @@ export const routes: Routes = [
   {path: 'reports', component: ReportsPage, canActivate: [AuthGuard] },
   {path: 'reports/new', component: NewReportPage, canActivate: [AuthGuard] },
   {path: 'reports/edit/:id', component: EditReportPage, canActivate: [AuthGuard] },
-  {path: '**', redirectTo: ''}
+  {path: '**', component: NotFoundPage, canActivate: [AuthGuard] }
 ];
