@@ -19,7 +19,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    - name: Set up environment variables
+      run: |
+        cp .env.ci .env
+
     - name: Build and run Docker containers
       run: |
-        docker network create --driver bridge app-network
+        docker network create --driver bridge $APP_NETWORK
         docker-compose up --build
