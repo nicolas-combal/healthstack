@@ -2,11 +2,36 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: auth-service
+
+    - name: Run dummy test
+      run: npm test
+      working-directory: auth-service
+
   docker:
     runs-on: ubuntu-latest
     env:
@@ -36,8 +61,6 @@ jobs:
       - name: Build and run Docker containers
         run: docker compose up --build --detach
 
-      - name: Wait for services to be healthy
-        run: docker compose wait auth-db report-db
 
       - name: Run tests
         run: docker compose exec api-gateway npm test
