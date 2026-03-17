@@ -23,7 +23,14 @@ jobs:
       run: |
         cp .env.ci .env
 
+    - name: Debug Docker
+      run: |
+        docker info
+        docker network ls
+
     - name: Build and run Docker containers
       run: |
-        docker network ls | grep $APP_NETWORK || docker network create --driver bridge $APP_NETWORK
+        if ! docker network ls | grep -q $APP_NETWORK; then
+          docker network create --driver bridge $APP_NETWORK
+        fi
         docker-compose up --build
