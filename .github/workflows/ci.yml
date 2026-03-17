@@ -1,0 +1,63 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: auth-service
+
+      - name: Run unit tests
+        run: npm test
+        working-directory: auth-service
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up environment variables
+        run: cp .env.ci .env
+
+      - name: Load .env into environment
+        run: grep -v '^\s*#' .env | grep '=' >> $GITHUB_ENV
+
+      - name: Debug env vars                     # ← add this temporarily
+        run: |
+          echo "=== Interpolated compose config ==="
+          docker compose config
+
+      - name: Create Docker network
+        run: |
+          if ! docker network ls | grep -q "$APP_NETWORK"; then
+            docker network create --driver bridge "$APP_NETWORK"
+          fi
+
+      - name: Build and run Docker containers
+        run: docker compose up --build --detach
+
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
