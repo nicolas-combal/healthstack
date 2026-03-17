@@ -25,5 +25,5 @@ jobs:
 
     - name: Build and run Docker containers
       run: |
-        docker network create --driver bridge $APP_NETWORK
+        docker network ls | grep $APP_NETWORK || docker network create --driver bridge $APP_NETWORK
         docker-compose up --build
