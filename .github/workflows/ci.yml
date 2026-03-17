@@ -2,34 +2,30 @@ name: CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    branches: [main]
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4          # ✅ upgraded from v3
+        uses: actions/checkout@v4.2.2
 
       - name: Set up environment variables
         run: cp .env.ci .env
 
-      - name: Load .env into environment   # ✅ makes APP_NETWORK available to subsequent steps
-        run: |
-          grep -v '^\s*#' .env | grep '=' >> $GITHUB_ENV
+      - name: Load .env into environment
+        run: grep -v '^\s*#' .env | grep '=' >> $GITHUB_ENV
 
-      - name: Debug Docker
+      - name: Debug env vars                     # ← add this temporarily
         run: |
-          docker info
-          docker network ls
+          echo "=== Interpolated compose config ==="
+          docker compose config
 
       - name: Create Docker network
         run: |
@@ -38,18 +34,14 @@ jobs:
           fi
 
       - name: Build and run Docker containers
-        run: |
-          docker compose up --build --detach   # ✅ --detach so CI doesn't hang
-          docker compose ps                     # show running services for logs
+        run: docker compose up --build --detach
 
       - name: Wait for services to be healthy
-        run: |
-          docker compose wait auth-db report-db  # blocks until healthchecks pass
+        run: docker compose wait auth-db report-db
 
-      - name: Run tests                          # placeholder — add your actual test command
-        run: |
-          docker compose exec api-gateway npm test
+      - name: Run tests
+        run: docker compose exec api-gateway npm test
 
       - name: Tear down
-        if: always()                             # ✅ cleanup even on failure
+        if: always()
         run: docker compose down -v
