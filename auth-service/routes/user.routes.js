@@ -191,7 +191,7 @@ router.post("/signup", async (req, res) => {
     const { username, password, email, role = "user" } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: "Username and password are required" });
+      throw new AppError('VALIDATION_ERROR', 'Username and password are required', 400);
     }
 
     const existingUser = await User.findOne({
@@ -204,7 +204,7 @@ router.post("/signup", async (req, res) => {
 
     const existingEmail = await User.findOne({ where: { email } });
     if (existingEmail) {
-      return res.status(400).json({ message: "Email already exists" });
+      throw new AppError('EMAIL_EXISTS', 'Email already exists', 400);
     }
 
     const saltRounds = 10;
@@ -244,7 +244,7 @@ router.post("/signup", async (req, res) => {
   } catch (err) {
     console.error("Signup error:", err);
     if (err.name === "SequelizeUniqueConstraintError") {
-      return res.status(400).json({ message: "Email must be unique" });
+      throw new AppError('EMAIL_EXISTS', 'Email already exists', 400);
     }
     throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
