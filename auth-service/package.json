@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon -L server.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint test/users.test.js"
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +24,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "eslint": "^10.0.3",
     "jest": "^29.0.0",
     "nodemon": "^3.1.10",
     "supertest": "^6.3.0"
