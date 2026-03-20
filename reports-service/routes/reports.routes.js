@@ -26,8 +26,15 @@ router.get('/', authDoctor, async (req, res) => {
     }
     res.json(reports);
   } catch (err) {
+    if (err instanceof AppError) throw err;
+    
     console.error(err);
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 

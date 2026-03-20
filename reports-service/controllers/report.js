@@ -13,7 +13,15 @@ async function list (req, res){
         }
         return res.json(reports);
     } catch (err) {
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+        if (err instanceof AppError) throw err;
+        
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
     }
 }
 
@@ -28,8 +36,16 @@ async function listpatient (req, res){
         }
         return res.json(reports);
     } catch (err) {
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 async function read (req, res){
@@ -41,8 +57,16 @@ async function read (req, res){
         }
         res.json(report)
     } catch (err){
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 async function create (req, res){
@@ -58,8 +82,16 @@ async function create (req, res){
             'message': "Report created succesfully"
         })
     } catch (err) {
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 async function update (req, res){
@@ -72,8 +104,16 @@ async function update (req, res){
             'message': "Report updated successfully"
         })
     } catch (err) {
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 async function remove (req, res){
@@ -86,8 +126,16 @@ async function remove (req, res){
             'message': 'report deleted succesfully'
         })
     } catch (err){
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 
@@ -100,8 +148,16 @@ async function countPatientsByDoctor(req, res) {
       });
 
     } catch (err) {
-        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
-    }
+        if (err instanceof AppError) throw err;
+
+        console.error(err);
+        const isProd = process.env.NODE_ENV === 'production';
+        throw new AppError(
+          'INTERNAL_ERROR',
+          isProd ? 'Internal error' : err.message,
+          500
+        );
+      }
 }
 
 
