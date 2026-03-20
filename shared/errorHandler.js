@@ -8,7 +8,7 @@ module.exports = (err, req, res, next) => {
   res.status(status).json({
     error: {
       code,
-      message: isProd && status === 500 ? 'Erreur interne du serveur' : message,
+      message: isProd && status === 500 ? 'Internal Server Error' : message,
       status
     }
   });
