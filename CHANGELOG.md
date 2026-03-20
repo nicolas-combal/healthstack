@@ -113,3 +113,8 @@ chore: update changelog [skip ci]
 Merge branch 'main' of https://github.com/nicolas-combal/healthstack
 fix(reports): added missing error messages
 chore: update changelog [skip ci]
+## v1.4.4
+
+Merge branch 'main' of https://github.com/nicolas-combal/healthstack
+fix(reports): still adding missing error messages
+chore: update changelog [skip ci]
