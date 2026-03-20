@@ -1,4 +1,4 @@
-# 🧱 Healthstack (test)
+# 🧱 Healthstack
 
 ## Explication du Projet
 
