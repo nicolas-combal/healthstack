@@ -141,3 +141,7 @@ chore: update changelog [skip ci]
 feat: add linter
 feat: add linter
 chore: update changelog [skip ci]
+## v1.7.0
+
+feat(frontend): added an error handler for the front and fixed the page reload
+chore: update changelog [skip ci]
