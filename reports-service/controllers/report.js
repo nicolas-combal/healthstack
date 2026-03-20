@@ -1,5 +1,4 @@
 const Report  = require('../models/report');
-const { Op, fn, col } = require("sequelize");
 
 async function list (req, res){
     const doctorId = req.user_id
@@ -7,10 +6,13 @@ async function list (req, res){
     try {
         const reports = await Report.findAll({where: {
             id_doctor: doctorId
-        }})
+        }});
+        if (!reports.length) {
+            throw new AppError('NO_REPORTS', 'No reports found for this doctor', 404);
+        }
         return res.json(reports);
     } catch (err) {
-        return res.status(500).json({error: "Database error"})
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -19,10 +21,13 @@ async function listpatient (req, res){
     try {
         const reports = await Report.findAll({where: {
             id_patient: patientId
-        }})
+        }});
+        if (!reports.length) {
+            throw new AppError('NO_REPORTS', 'No reports found for this patient', 404);
+        }
         return res.json(reports);
     } catch (err) {
-        return res.status(500).json({error: "Database error"})
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -30,9 +35,12 @@ async function read (req, res){
     const reportId = req.params.id
     try{
         const report = await Report.findByPk(reportId)
+        if (!report) {
+            throw new AppError('REPORT_NOT_FOUND', 'Report not found', 404);
+        }
         res.json(report)
     } catch (err){
-        res.status(500).json({error: "Database error"})
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -44,12 +52,12 @@ async function create (req, res){
     };
     console.log('report', report)
     try {
-        await Report.create(report)
+        await Report.create(report);
         res.json({
             'message': "Report created succesfully"
         })
     } catch (err) {
-        res.status(500).json({"error": `Database error: ${err}, ${JSON.stringify(req.body)}`})
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -58,12 +66,12 @@ async function update (req, res){
     try{
         Report.update(req.body, {
             where: {id: id}
-        })
+        });
         res.json({
             'message': "Report updated successfully"
         })
     } catch (err) {
-        res.status(500).json({error: 'Cannot update report'})
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -77,7 +85,7 @@ async function remove (req, res){
             'message': 'report deleted succesfully'
         })
     } catch (err){
-        message: "can not delete report"
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
@@ -91,9 +99,7 @@ async function countPatientsByDoctor(req, res) {
       });
 
     } catch (err) {
-      res.status(500).json({
-        message: "Cannot generate random number"
-      });
+        throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
     }
 }
 
