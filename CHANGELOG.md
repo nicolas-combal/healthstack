@@ -128,3 +128,7 @@ chore: update changelog [skip ci]
 Merge branch 'main' of https://github.com/nicolas-combal/healthstack
 fix(reports): json parse
 chore: update changelog [skip ci]
+## v1.4.7
+
+fix: unittest
+chore: update changelog [skip ci]
