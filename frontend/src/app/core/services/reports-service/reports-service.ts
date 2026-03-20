@@ -14,12 +14,13 @@ export class ReportsService {
   }
 
   getAllReports(){
-    return this.http.get<ReportApiResponse[]>(this.REPORTS_API_URL, { withCredentials: true });
+    return this.http.get<ReportApiResponse[]>(this.REPORTS_API_URL + "/doctor", { withCredentials: true });
   }
 
   getCountPatientsByDoctor() {
     return this.http.get<{ patientCount: number }>(
-      '/countPatientsByDoctor'
+      this.REPORTS_API_URL + "/countPatientsByDoctor",
+      { withCredentials: true }
     );
   }
 

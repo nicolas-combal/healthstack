@@ -144,7 +144,7 @@ async function countPatientsByDoctor(req, res) {
       const number = Math.floor(Math.random() * 21);
 
       res.json({
-        value: number
+        patientCount: number
       });
 
     } catch (err) {
