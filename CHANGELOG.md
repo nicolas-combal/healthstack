@@ -123,3 +123,8 @@ chore: update changelog [skip ci]
 Merge branch 'main' of https://github.com/nicolas-combal/healthstack
 fix(reports): added the final error messages (i hope)
 chore: update changelog [skip ci]
+## v1.4.6
+
+Merge branch 'main' of https://github.com/nicolas-combal/healthstack
+fix(reports): json parse
+chore: update changelog [skip ci]
