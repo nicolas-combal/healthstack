@@ -53,9 +53,9 @@ jobs:
           while read line; do
             if [[ "$line" == *"BREAKING CHANGE"* ]]; then
               MAJOR=1
-            elif [[ "$line" == feat:* ]]; then
+            elif [[ "$line" == feat* ]]; then
               MINOR=1
-            elif [[ "$line" == fix:* ]]; then
+            elif [[ "$line" == fix* ]]; then
               PATCH=1
             fi
           done < commits.txt
