@@ -91,3 +91,11 @@ Merge pull request #25 from nicolas-combal/22-sous-tâches-frontend-epic6
 chore: update changelog [skip ci]
 feat(api): ajouter une route pour récupérer les informations de l'utilisateur connecté et valider l'unicité de l'email lors de l'inscription
 feat(frontend): afficher le profil utilisateur sur la home (#22)
+## v1.4.0
+
+fix: docker limits
+feat: migration scripts
+feat(reports): added error messages
+Merge branch 'main' of https://github.com/nicolas-combal/healthstack
+Fix: French to english
+chore: update changelog [skip ci]
