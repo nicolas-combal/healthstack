@@ -53,5 +53,10 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "storybook": "^10.2.13",
     "typescript": "^5.9.3"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^\\.\\./shared/(.*)$": "<rootDir>/../shared/$1"
+    }
   }
 }
