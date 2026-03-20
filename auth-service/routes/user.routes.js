@@ -30,8 +30,15 @@ router.get('/', async (req, res) => {
     }
     res.json(users);
   } catch (err) {
+    if (err instanceof AppError) throw err;
+
     console.error(err);
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 
@@ -75,8 +82,15 @@ router.get('/patients', authDoctor, async (req, res) => {
     }
     res.json(users);
   } catch (err) {
+    if (err instanceof AppError) throw err;
+
     console.error(err);
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 
@@ -118,7 +132,15 @@ router.get('/name/:id', async (req, res) => {
     }
     res.json(user); // ou res.json({ name: user.name }) si tu veux plus simple
   } catch (err) {
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    if (err instanceof AppError) throw err;
+
+    console.error(err);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 
@@ -152,8 +174,15 @@ router.get("/me", auth, async (req, res) => {
 
     return res.json(user);
   } catch (err) {
-    console.error("Fetch current user error:", err);
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    if (err instanceof AppError) throw err;
+
+    console.error(err);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 
@@ -242,6 +271,8 @@ router.post("/signup", async (req, res) => {
     });
 
   } catch (err) {
+    if (err instanceof AppError) throw err;
+
     console.error("Signup error:", err);
     if (err.name === "SequelizeUniqueConstraintError") {
       throw new AppError('EMAIL_EXISTS', 'Email already exists', 400);
@@ -308,8 +339,15 @@ router.post("/login", async (req, res) => {
     res.json(jwtToken);
 
   } catch (err) {
-    console.error("Connexion error:", err);
-    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
+    if (err instanceof AppError) throw err;
+
+    console.error(err);
+    const isProd = process.env.NODE_ENV === 'production';
+    throw new AppError(
+      'INTERNAL_ERROR',
+      isProd ? 'Internal error' : err.message,
+      500
+    );
   }
 });
 
