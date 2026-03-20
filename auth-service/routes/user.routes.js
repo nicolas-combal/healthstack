@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { auth, authDoctor } = require('../middleware/auth');
+const AppError = require('../shared/AppError');
 
 const User = require('../models/models');
 
@@ -24,10 +25,13 @@ const User = require('../models/models');
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll();
+    if (users.length === 0) {
+      throw new AppError('NO_USERS', 'No users found', 404);
+    }
     res.json(users);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 
@@ -60,16 +64,19 @@ router.get('/', async (req, res) => {
  *       500:
  *         description: Internal server error
  */
-router.get('/patients',authDoctor, async (req, res) => {
+router.get('/patients', authDoctor, async (req, res) => {
   try {
     const users = await User.findAll({
       where: { role: 'user' },
       attributes: ['id', 'name']
     });
+    if (users.length === 0) {
+      throw new AppError('NO_USERS', 'No users found', 404);
+    }
     res.json(users);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 
@@ -107,11 +114,11 @@ router.get('/name/:id', async (req, res) => {
       attributes: ['name']
     });
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      throw new AppError('USER_NOT_FOUND', 'User not found', 404);
     }
     res.json(user); // ou res.json({ name: user.name }) si tu veux plus simple
   } catch (err) {
-    res.status(500).json({ error: `Database error ${err}` });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 
@@ -140,13 +147,13 @@ router.get("/me", auth, async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      throw new AppError('USER_NOT_FOUND', 'User not found', 404);
     }
 
     return res.json(user);
   } catch (err) {
     console.error("Fetch current user error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 
@@ -192,7 +199,7 @@ router.post("/signup", async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      throw new AppError('USER_EXISTS', 'User already exists', 400);
     }
 
     const existingEmail = await User.findOne({ where: { email } });
@@ -239,7 +246,7 @@ router.post("/signup", async (req, res) => {
     if (err.name === "SequelizeUniqueConstraintError") {
       return res.status(400).json({ message: "Email must be unique" });
     }
-    res.status(500).json({ error: "Internal server error" });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 
@@ -274,13 +281,13 @@ router.post("/login", async (req, res) => {
     });
 
     if (!loged_user) {
-      return res.status(401).json({ message: "Authentication failed" });
+      throw new AppError('AUTH_FAILED', 'Authentication failed', 401);
     }
 
     const isValidPassword = await bcrypt.compare(password, loged_user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Authentication failed" });
+      throw new AppError('AUTH_FAILED', 'Authentication failed', 401);
     }
 
     const role = loged_user.role;
@@ -302,7 +309,7 @@ router.post("/login", async (req, res) => {
 
   } catch (err) {
     console.error("Connexion error:", err);
-    res.status(500).json({ error: "Internal server error" });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 

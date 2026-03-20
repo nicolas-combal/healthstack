@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -25,13 +25,19 @@ export class LoginPage {
   username: string = '';
   password: string = '';
 
+  errorMessage = '';
+
   constructor(private authService: AuthService, private router: Router) {
   }
 
   onSubmit() {
-    this.authService.login(this.username, this.password).subscribe(() => {
-        void this.router.navigate(['/']);
+    this.authService.login(this.username, this.password).subscribe({
+      next: () => this.router.navigate(['/']),
+      error: (err) => {
+        if (err.status === 401) {
+          this.errorMessage = err.message;
+        }
       }
-    );
+    });
   }
 }

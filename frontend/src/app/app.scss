@@ -12,3 +12,26 @@
   flex-direction: row;
   gap: 1rem;
 }
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: #fee2e2;
+  border: 0.5px solid #f87171;
+  color: #991b1b;
+  font-size: 14px;
+  z-index: 9999;
+
+  @media (prefers-color-scheme: dark) {
+    background: #450a0a;
+    border-color: #b91c1c;
+    color: #fca5a5;
+  }
+}

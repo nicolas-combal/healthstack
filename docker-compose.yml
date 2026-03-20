@@ -26,6 +26,7 @@ services:
     volumes:
       - ./api-gateway:/app
       - /app/node_modules
+      - ./shared:/app/shared
     cpus: 1.00
     mem_limit: 768m
     mem_reservation: 384m
@@ -58,6 +59,7 @@ services:
     volumes:
       - ./auth-service:/app
       - /app/node_modules
+      - ./shared:/app/shared
     depends_on:
       auth-db:
         condition: service_healthy
@@ -102,6 +104,7 @@ services:
     volumes:
       - ./reports-service:/app
       - /app/node_modules
+      - ./shared:/app/shared
     depends_on:
       report-db:
         condition: service_healthy

@@ -1,2 +1,5 @@
 <app-header></app-header>
 <router-outlet/>
+<div class="toast" [style.display]="toast.message() ? 'block' : 'none'">
+  {{ toast.message() }}
+</div>

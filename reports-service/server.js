@@ -19,6 +19,9 @@ swaggerDocs(app); //
 
 app.use('/', reportsRoutes);
 
+const errorHandler = require('./shared/errorHandler');
+app.use(errorHandler);
+
 initDb().then(() => {
   app.listen(port, () => {
     console.log(`✅ Reports service listening at http://localhost:${port}`);

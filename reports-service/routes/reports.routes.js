@@ -3,6 +3,7 @@ const router = express.Router();
 const Report = require('../models/report');
 const reportController = require('../controllers/report');
 const { auth, authDoctor } = require('../middleware/auth');
+const AppError = require('../shared/AppError');
 
 
 router.get("/countPatientsByDoctor", authDoctor, reportController.countPatientsByDoctor);
@@ -20,10 +21,13 @@ router.get("/countPatientsByDoctor", authDoctor, reportController.countPatientsB
 router.get('/', authDoctor, async (req, res) => {
   try {
     const reports = await Report.findAll();
+    if (reports.length === 0) {
+      throw new AppError('NO_REPORTS', 'No reports found', 404);
+    }
     res.json(reports);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+    throw new AppError(err.code || 'INTERNAL_ERROR', err.message || 'Internal error', err.status || 500);
   }
 });
 

@@ -19,6 +19,9 @@ const userRoutes = require('./routes/user.routes'); // /users
 
 app.use('/users', userRoutes); // GET /users
 
+const errorHandler = require('./shared/errorHandler');
+app.use(errorHandler);
+
 // Initialize DB then start server
 initDb().then(() => {
   app.listen(port, () => {

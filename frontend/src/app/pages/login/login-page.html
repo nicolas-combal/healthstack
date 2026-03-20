@@ -15,6 +15,9 @@
 
       <span>First connexion ? <a routerLink="/signup">Sign up</a></span>
       <button mat-raised-button color="primary" type="submit">Login</button>
+      @if (errorMessage) {
+        <span class="error-message">{{ errorMessage }}</span>
+      }
     </form>
   </mat-card-content>
 </mat-card>
