@@ -18,4 +18,5 @@ export interface CurrentUserProfile {
   id: string;
   name: string;
   email: string;
+  role: string;
 }

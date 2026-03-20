@@ -9,7 +9,7 @@ import {MatOption} from '@angular/material/core';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../../../core/services/auth-service/auth-service';
-import {CheckAuthApiResponse, Patient} from '../../../core/interfaces/auth-interfaces';
+import {Patient} from '../../../core/interfaces/auth-interfaces';
 import {ReportsService} from '../../../core/services/reports-service/reports-service';
 
 @Component({
@@ -49,9 +49,14 @@ export class NewReportPage implements OnInit {
   }
 
   ngOnInit() {
-    this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
-      this.doctorId = response.user.user_id;
-    })
+    const user = this.authService.currentUser();
+    if (user) {
+      this.doctorId = user.id;
+    } else {
+      this.authService.checkAuth().subscribe(user => {
+        if (user) this.doctorId = user.id;
+      });
+    }
     this.fillPatients();
   }
 

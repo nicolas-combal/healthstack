@@ -10,7 +10,6 @@ import { MatIcon } from '@angular/material/icon';
 import { ReportsService } from '../../core/services/reports-service/reports-service';
 import { ReportApiResponse, ReportRow } from '../../core/interfaces/reports-interfaces';
 import { AuthService } from '../../core/services/auth-service/auth-service';
-import { CheckAuthApiResponse } from '../../core/interfaces/auth-interfaces';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -44,21 +43,29 @@ export class ReportsPage implements OnInit {
   constructor(private authService: AuthService, private reportsService: ReportsService) {}
 
   ngOnInit() {
-    this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
-      this.userRole = response.user.role;
+    const user = this.authService.currentUser();
+    if (user) {
+      this.initPage(user.role);
+    } else {
+      this.authService.checkAuth().subscribe(user => {
+        if (user) this.initPage(user.role);
+      });
+    }
+  }
 
-      if (this.userRole === 'doctor') {
-        this.displayedColumns.push('actions');
-        this.reportsService.getCountPatientsByDoctor().subscribe(
-          (apiResponse: { patientCount: number }) => {
-            this.patientCount = apiResponse.patientCount;
-          }
-        );
-        this.fetchAndDisplayReports(this.reportsService.getAllReports.bind(this.reportsService));
-      } else {
-        this.fetchAndDisplayReports(this.reportsService.getPatientReports.bind(this.reportsService));
-      }
-    });
+  private initPage(role: string): void {
+    this.userRole = role;
+    if (this.userRole === 'doctor') {
+      this.displayedColumns.push('actions');
+      this.reportsService.getCountPatientsByDoctor().subscribe(
+        (apiResponse: { patientCount: number }) => {
+          this.patientCount = apiResponse.patientCount;
+        }
+      );
+      this.fetchAndDisplayReports(this.reportsService.getAllReports.bind(this.reportsService));
+    } else {
+      this.fetchAndDisplayReports(this.reportsService.getPatientReports.bind(this.reportsService));
+    }
   }
 
   private fetchAndDisplayReports(fetchFn: () => any): void {

@@ -7,7 +7,6 @@ import {CdkTextareaAutosize, TextFieldModule} from '@angular/cdk/text-field';
 import {Router} from '@angular/router';
 
 import {AuthService} from '../../../core/services/auth-service/auth-service';
-import {CheckAuthApiResponse} from '../../../core/interfaces/auth-interfaces';
 import {ReportsService} from '../../../core/services/reports-service/reports-service';
 import {ReportApiResponse} from '../../../core/interfaces/reports-interfaces';
 
@@ -47,10 +46,7 @@ export class EditReportPage implements OnInit {
   }
 
   ngOnInit() {
-    this.reportId = this.router.url.split('/')[3]
-    this.authService.checkAuth().subscribe((response: CheckAuthApiResponse) => {
-      this.doctorId = response.user.user_id;
-    })
+    this.reportId = this.router.url.split('/')[3];
     this.prefillForm();
   }
 

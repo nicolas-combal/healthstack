@@ -11,7 +11,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     cpus: 1
-    mem_limit: 2g
+    mem_limit: 4g
     mem_reservation: 1g
 
   api-gateway:

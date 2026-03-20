@@ -1,7 +1,7 @@
 import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, Observable, throwError } from "rxjs";
-import { ToastService } from "../services/toast/toast-service";
+import { ToastService } from "../services/toast-service/toast-service";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {

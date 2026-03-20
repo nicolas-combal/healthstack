@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {CheckAuthApiResponse, CurrentUserProfile, Patient} from '../../interfaces/auth-interfaces';
+import { catchError, of, switchMap, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +11,21 @@ export class AuthService {
 
   AUTH_API_URL = "http://localhost:8000/auth/users";
 
+  currentUser = signal<CurrentUserProfile | null>(null);
+
   constructor(private http: HttpClient) {
 
   }
 
   checkAuth() {
-    return this.http.get<CheckAuthApiResponse>(this.AUTH_API_URL + '/check', {withCredentials: true});
+    return this.http.get<CheckAuthApiResponse>(this.AUTH_API_URL + '/check', { withCredentials: true }).pipe(
+      switchMap(() => this.getCurrentUser()),
+      tap((user) => this.currentUser.set(user)),
+      catchError(() => {
+        this.currentUser.set(null);
+        return of(null);
+      })
+    );
   }
 
   getAllPatients() {
@@ -40,13 +50,14 @@ export class AuthService {
   }
 
   login(username: string, password: string) {
-    return this.http.post(this.AUTH_API_URL + "/login", {
-      username: username,
-      password: password
-    }, {withCredentials: true});
+    return this.http.post(this.AUTH_API_URL + "/login", { username, password }, { withCredentials: true }).pipe(
+      tap(() => this.checkAuth().subscribe())
+    );
   }
 
   logout() {
-    return this.http.get(this.AUTH_API_URL + "/logout", {withCredentials: true});
+    return this.http.get(this.AUTH_API_URL + "/logout", { withCredentials: true }).pipe(
+      tap(() => this.currentUser.set(null))
+    );
   }
 }
