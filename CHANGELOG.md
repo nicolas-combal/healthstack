@@ -103,3 +103,8 @@ chore: update changelog [skip ci]
 
 fix(reports): added missing import
 chore: update changelog [skip ci]
+## v1.4.2
+
+Merge branch 'main' of https://github.com/nicolas-combal/healthstack
+fix(frontend): page not found was auth guarded
+chore: update changelog [skip ci]
