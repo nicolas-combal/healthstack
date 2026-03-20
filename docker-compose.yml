@@ -10,9 +10,9 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    cpus: 0.50
-    mem_limit: 512m
-    mem_reservation: 256m
+    cpus: 1
+    mem_limit: 2g
+    mem_reservation: 1g
 
   api-gateway:
     build: ./api-gateway
