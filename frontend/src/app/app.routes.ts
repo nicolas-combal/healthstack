@@ -16,5 +16,5 @@ export const routes: Routes = [
   {path: 'reports', component: ReportsPage, canActivate: [AuthGuard] },
   {path: 'reports/new', component: NewReportPage, canActivate: [AuthGuard] },
   {path: 'reports/edit/:id', component: EditReportPage, canActivate: [AuthGuard] },
-  {path: '**', component: NotFoundPage, canActivate: [AuthGuard] }
+  {path: '**', component: NotFoundPage}
 ];
