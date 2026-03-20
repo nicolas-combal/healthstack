@@ -65,3 +65,29 @@ chore: update changelog [skip ci]
 Merge pull request #24 from nicolas-combal/19-sous-tâches-frontend-epic5
 feat: afficher le nombre de pation par medecins au niveau du front (#19)
 chore: update changelog [skip ci]
+## v1.3.0
+
+feat: Implémentation de la gestion des erreurs
+Merge pull request #29 from nicolas-combal/28-epic-8---orchestration---add-limits-to-docker
+feat(orchestration): add mem cpu limits (#28)
+Merge pull request #27 from nicolas-combal/26-epic-7
+feat(frontend): ajouter une route pour la gestion des 404 côté front
+fix(ci/cd): add unittest to workflow  (#26)
+fix(ci/cd): add unittest to workflow  (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build .env.ci (#26)
+fix(ci/cd): add docker build (#26)
+fix(ci/cd): add unit test and docker build (#26)
+Feat(ci/cd): add unit test and docker build (#26)
+Merge pull request #25 from nicolas-combal/22-sous-tâches-frontend-epic6
+chore: update changelog [skip ci]
+feat(api): ajouter une route pour récupérer les informations de l'utilisateur connecté et valider l'unicité de l'email lors de l'inscription
+feat(frontend): afficher le profil utilisateur sur la home (#22)
