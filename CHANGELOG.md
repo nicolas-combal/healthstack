@@ -136,3 +136,8 @@ chore: update changelog [skip ci]
 
 feat: unittest
 chore: update changelog [skip ci]
+## v1.6.0
+
+feat: add linter
+feat: add linter
+chore: update changelog [skip ci]
