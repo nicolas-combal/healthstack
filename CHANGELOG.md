@@ -99,3 +99,7 @@ feat(reports): added error messages
 Merge branch 'main' of https://github.com/nicolas-combal/healthstack
 Fix: French to english
 chore: update changelog [skip ci]
+## v1.4.1
+
+fix(reports): added missing import
+chore: update changelog [skip ci]
