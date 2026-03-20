@@ -145,3 +145,9 @@ chore: update changelog [skip ci]
 
 feat(frontend): added an error handler for the front and fixed the page reload
 chore: update changelog [skip ci]
+## v1.7.1
+
+conflict
+conflict 2
+fix: conflict
+chore: update changelog [skip ci]
