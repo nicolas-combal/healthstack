@@ -1,4 +1,5 @@
 const Report  = require('../models/report');
+const AppError = require('../shared/AppError');
 
 async function list (req, res){
     const doctorId = req.user_id
