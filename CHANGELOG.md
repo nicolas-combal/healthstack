@@ -151,3 +151,9 @@ conflict
 conflict 2
 fix: conflict
 chore: update changelog [skip ci]
+## v1.8.0
+
+feat: feature-1 (#36)
+feat: feature-2
+feat: feature 1
+chore: update changelog [skip ci]
