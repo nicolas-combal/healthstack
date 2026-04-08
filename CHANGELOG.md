@@ -157,3 +157,7 @@ feat: feature-1 (#36)
 feat: feature-2
 feat: feature 1
 chore: update changelog [skip ci]
+## v1.9.0
+
+feat: added crashes for the presentation
+chore: update changelog [skip ci]
