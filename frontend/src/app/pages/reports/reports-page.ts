@@ -40,6 +40,8 @@ export class ReportsPage implements OnInit {
   protected doctorsMap: Map<string, string> = new Map();
   protected patientsMap: Map<string, string> = new Map();
 
+  protected undefinedVariable: any;
+
   constructor(private authService: AuthService, private reportsService: ReportsService) {}
 
   ngOnInit() {

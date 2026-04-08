@@ -6,7 +6,6 @@ export class ErrorsService implements ErrorHandler {
   private toast = inject(ToastService);
 
   handleError(error: any): void {
-    console.error('Global error:', error);
     this.toast.show(error?.message || 'An unexpected error occurred. Please try again later.');
   }
 }
