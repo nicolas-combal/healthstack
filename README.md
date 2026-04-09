@@ -32,7 +32,7 @@ ainsi qu'une interface d’administration via pgAdmin.
 
 ---
 
-## 🚀 Lancer le projet n
+## 🚀 Lancer le projet
 
 ```bash
 docker network create --driver bridge app-network
