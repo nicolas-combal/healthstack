@@ -165,3 +165,7 @@ chore: update changelog [skip ci]
 
 feat: n
 chore: update changelog [skip ci]
+## v1.11.0
+
+feat: n
+chore: update changelog [skip ci]
